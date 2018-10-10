@@ -1,38 +1,50 @@
-Role Name
+cmdb
 =========
 
-A brief description of the role goes here.
+Deploy INDIGO CMDB service using docker containers. 
+
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+| Variable name  | Default Value | Description
+| -------------- | ------------- |------------- |
+| cmdb_conf_dir  | /etc/cmdb |  |
+| cmdb_image     | indigodatacloud/cmdb:indigo_2      |
+| cmdb_image     | indigodatacloud/cmdb:indigo_2      |
+| cmdb_data_dir  | /data/cmdb      |
+| cmdb_crud_username       | cmdb      |
+| cmdb_crud_password       | changeit      |
+| cmdb_crud_admin_group    | cmdb-dev-admins      |
+| cmdb_oidc_userinfo       | https://iam-test.indigo-datacloud.eu/userinfo      |
+| couchdb_image      | couchdb:1.6.1      |
+| couchdb_data_dir      | /data/couchdb      |
+| cmdb_target_url          | http://localhost:5984/indigo-cmdb-v2/_design/schema/_rewrite      |
+| cmdb_crud_target_url     |http://localhost:5984/indigo-cmdb-v2      |
+
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+indigo-dc.docker
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
     - hosts: servers
       roles:
          - { role: username.rolename, x: 42 }
 
-License
--------
 
-BSD
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Marica Antonacci (marica.antonacci@ba.infn.it)
+INFN Italy
