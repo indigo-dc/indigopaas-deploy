@@ -1,0 +1,24 @@
+---
+# defaults file for indigopaas
+
+im_conf_dir: /etc/im
+
+im_mysql_image: mysql
+im_mysql_data_dir: /data/mysql
+im_mysql_root_password: changeit
+im_mysql_dbname: im
+im_mysql_user: im
+im_mysql_password: changeit
+im_mysql_host: 127.0.0.1
+
+im_image: "indigodatacloud/im:{{im_image_version}}"
+im_image_version: 1.7.5
+im_repo_tag: "v{{im_image_version}}"
+im_conf_file: /etc/im/im.cfg
+im_cfg_max_ctx_time: 28800
+im_cfg_ansible_install_timeout: 500
+im_cfg_oidc_issuers: 'https://iam-test.indigo-datacloud.eu/'
+im_cfg_oidc_client_id:
+im_cfg_oidc_client_secret:
+
+

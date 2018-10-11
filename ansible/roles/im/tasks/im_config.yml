@@ -1,0 +1,18 @@
+---
+- name: Download IM config file
+  get_url:
+    url: "https://raw.githubusercontent.com/indigo-dc/im/{{im_repo_tag}}/etc/im.cfg"
+    dest: "{{im_conf_dir}}/im.cfg"
+
+- name: Update configuration
+  ini_file:
+    path: "{{im_conf_dir}}/im.cfg"
+    section: "{{ item.section }}"
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+  with_items:
+    - { section: "im", option: "MAX_CONTEXTUALIZATION_TIME", value: "{{im_cfg_max_ctx_time}}" }
+    - { section: "im", option: "ANSIBLE_INSTALL_TIMEOUT", value: "{{im_cfg_ansible_install_timeout}}" }
+    - { section: "im", option: "OIDC_ISSUERS", value: "{{im_cfg_oidc_issuers|join('')}}" }
+    - { section: "im", option: "OIDC_CLIENT_ID", value: "{{im_cfg_oidc_client_id}}" }
+    - { section: "im", option: "OIDC_CLIENT_SECRET", value: "{{im_cfg_oidc_client_secret}}" }
