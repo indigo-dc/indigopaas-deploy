@@ -1,22 +1,46 @@
-Role Name
+slam
 =========
 
-A brief description of the role goes here.
+Deploy INDIGO CMDB service using docker containers. <br>
+The tasks included in the role are based on the SLAM [deployment guide](https://indigo-dc.gitbooks.io/slam/installation.html).
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+| Variable name  | Default Value | Description
+| -------------- | ------------- |------------- |
+| slam_mysql_image | mysql |5.7|
+| slam_mysql_data_dir | /data/mysql|
+| slam_mysql_root_password | changeit|
+| slam_mysql_dbname | slam|
+| slam_mysql_user | slam|
+| slam_mysql_password | changeit|
+| slam_mysql_host | localhost|
+| slam_mongo_image | mongo|
+| slam_mongo_data_dir | /data/mongo|
+| slam_mongo_host | localhost|
+| slam_mongo_db | slam|
+| slam_image | indigodatacloud/slam |v2.0.0|
+| slam_provider_email | ''|
+| slam_iam_url | https |//iam.hostname|
+| slam_iam_token_url | "{{slam_iam_url}}/token"|
+| slam_iam_authorize_url | "{{slam_iam_url}}/authorize"|
+| slam_iam_client_id ||
+| slam_iam_client_secret ||
+| slam_cmdb_url | http |//cmdb.hostname|
+| slam_onedata_url | https |//onedata.indigo-datacloud.eu|
+| slam_keystore_password | changeit|
+| slam_keystore_alias | slam|
+| slam_keystore_path | /etc/slam/KeyStore.jks|
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+indigo-dc.docker
 
 Example Playbook
 ----------------
@@ -27,12 +51,9 @@ Including an example of how to use your role (for instance, with variables passe
       roles:
          - { role: username.rolename, x: 42 }
 
-License
--------
-
-BSD
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Marica Antonacci (marica.antonacci@ba.infn.it) <br>
+INFN Italy
