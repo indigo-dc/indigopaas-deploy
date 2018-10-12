@@ -1,22 +1,41 @@
-Role Name
+im
 =========
 
-A brief description of the role goes here.
+Deploy INDIGO Infrastruture Manager (IM) service using docker containers. <br> 
+The tasks included in the role are based on the IM [deployment guide](https://indigo-dc.gitbooks.io/im/content/).
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+| Variable name  | Default Value | Description
+| -------------- | ------------- |------------- |
+| im_conf_dir | /etc/im | Directory used to save the service configuration (env files for docker containers) 
+| im_mysql_image | mysql | Docker image for running the relational DB
+| im_mysql_data_dir | /data/mysql | Directory used to store the mysql data
+| im_mysql_root_password | changeit | Password for mysql root user
+| im_mysql_dbname | im | Mysql DB name
+| im_mysql_user | im | Mysql user name
+| im_mysql_password | changeit | Mysql user password
+| im_mysql_host | 127.0.0.1 | Mysql host
+| im_image | "indigodatacloud/im |{{im_image_version}}" | Docker image for running IM service
+| im_image_version | 1.7.5 | Docker image version for IM
+| im_repo_tag | "v{{im_image_version}}" | Tag for downloading the configuration file (im.cfg) from [Github](https://github.com/indigo-dc/im)
+| im_conf_file | /etc/im/im.cfg | Path to the im.conf file (will be mounted in the container) 
+| im_cfg_max_ctx_time | 28800 | Timeout for contextualization. <br> Set MAX_CONTEXTUALIZATION_TIME in im.cfg
+| im_cfg_ansible_install_timeout | 500 | Max time expected to install Ansible in the master node. <br> Set ANSIBLE_INSTALL_TIMEOUT in im.cfg
+| im_cfg_oidc_issuers | 'https |//iam-test.indigo-datacloud.eu/' | Supported OIDC issuers (can be a list). <br> Set OIDC_ISSUERS in im.cfg
+| im_cfg_oidc_client_id || Set OIDC_CLIENT_ID in im.cfg | OIDC client ID of the IM service
+| im_cfg_oidc_client_secret || OIDC client secret of the IM service
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+indigo-dc.docker
+
 
 Example Playbook
 ----------------
@@ -27,12 +46,9 @@ Including an example of how to use your role (for instance, with variables passe
       roles:
          - { role: username.rolename, x: 42 }
 
-License
--------
-
-BSD
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Marica Antonacci (marica.antonacci@ba.infn.it) <br> 
+INFN Italy
