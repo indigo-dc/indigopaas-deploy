@@ -2,7 +2,7 @@ cmdb
 =========
 
 Deploy INDIGO CMDB service using docker containers. 
-
+The tasks included in the role are based on the CMDB [deployment guide](https://github.com/indigo-dc/cmdb#cmdb-documentation).
 
 Requirements
 ------------
