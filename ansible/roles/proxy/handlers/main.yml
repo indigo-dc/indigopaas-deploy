@@ -1,0 +1,6 @@
+---
+# handlers file for indigopaas
+- name: restart nginx
+  service:
+    name: nginx
+    state: restarted

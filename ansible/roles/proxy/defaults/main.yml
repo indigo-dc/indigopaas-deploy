@@ -1,0 +1,10 @@
+---
+# defaults file for indigopaas/proxy
+letsencrypt_email: ""
+domain_name: ""
+proxy_certificate_path: /etc/letsencrypt/live/{{ domain_name }}/fullchain.pem
+proxy_certificate_key_path: /etc/letsencrypt/live/{{ domain_name }}/privkey.pem
+proxy_trusted_certificate_path: /etc/letsencrypt/live/{{ domain_name }}/fullchain.pem
+#
+cpr_port: 8081
+
