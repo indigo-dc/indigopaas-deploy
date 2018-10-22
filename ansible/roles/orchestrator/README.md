@@ -15,7 +15,6 @@ Role Variables
 | Variable name  | Default Value | Description
 | -------------- | ------------- |------------- |
 | orchestrator_conf_dir | /etc/orchestrator| Directory used to save the service configuration (env files for docker containers, application properties, ect.)
-| |
 | orchestrator_mysql_image | mysql:5.7 | Docker image for running the DB |
 | orchestrator_mysql_data_dir | /data/mysql| Directory used to save the DB data
 | orchestrator_mysql_root_password | changeit| MySQL password for root.<br> :boom: **Please change it otherwise the role will fail**
