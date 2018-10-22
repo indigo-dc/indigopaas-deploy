@@ -10,5 +10,5 @@ galaxy_info:
         - xenial
   galaxy_tags: 
    - indigo-paas
-dependencies: []
-#   - { role: indigo-dc.docker }
+dependencies:
+  - { role: common }
