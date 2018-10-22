@@ -1,0 +1,30 @@
+---
+# defaults file for indigopaas
+
+orchestrator_conf_dir: /etc/orchestrator
+
+orchestrator_mysql_image: mysql:5.7
+orchestrator_mysql_data_dir: /data/mysql
+orchestrator_mysql_root_password: changeit
+orchestrator_dbname: orchestrator
+orchestrator_workflow_dbname: workflow
+orchestrator_mysql_user: orchestrator
+orchestrator_mysql_password: changeit
+orchestrator_mysql_host: 127.0.0.1
+orchestrator_dbport: 3306
+orchestrator_image: indigodatacloud/orchestrator:pr-286
+
+orchestrator_url: http://localhost:8080
+orchestrator_im_url: "https://servproject.i3m.upv.es:8811"
+orchestrator_cmdb_url: "http://indigo.cloud.plgrid.pl/cmdb"
+orchestrator_slam_url: "http://indigo.cloud.plgrid.pl/slam"
+orchestrator_cpr_url: "https://indigo-paas.cloud.ba.infn.it/cpr"
+orchestrator_monitoring_url: "http://90.147.170.181"
+orchestrator_onezone_url: "https://onezone.cloud.ba.infn.it:8443"
+
+orchestrator_iam_issuer: https://iam-test.indigo-datacloud.eu/
+orchestrator_iam_client_id: ""
+orchestrator_iam_client_secret: ""
+orchestrator_clues_iam_client_id: ""
+orchestrator_clues_iam_client_secret: ""
+

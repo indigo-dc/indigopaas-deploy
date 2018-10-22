@@ -1,0 +1,10 @@
+  oidc:
+   enabled: true
+   iam-properties:
+     "[{{orchestrator_iam_issuer}}]":
+       orchestrator:
+         client-id: "{{orchestrator_iam_client_id}}"
+         client-secret: "{{orchestrator_iam_client_secret}}"
+       clues:
+         client-id: "{{orchestrator_clues_iam_client_id}}"
+         client-secret: "{{orchestrator_clues_iam_client_secret}}"
