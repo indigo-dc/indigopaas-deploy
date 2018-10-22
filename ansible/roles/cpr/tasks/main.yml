@@ -1,0 +1,14 @@
+---
+# tasks file for indigopaas.cpr
+
+- name: Start CPR container
+  docker_container:
+    name: cpr
+    image: "{{ cpr_image }}"
+    detach: true
+    state: started
+    network_mode: "bridge"
+    published_ports:
+      - "{{cpr_port}}:8080"
+    restart_policy: always
+
