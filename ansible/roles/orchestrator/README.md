@@ -22,7 +22,7 @@ Role Variables
 | orchestrator_dbname | orchestrator| MySQL deployments database
 | orchestrator_workflow_dbname | workflow| MySQL workflow database
 | orchestrator_mysql_user | orchestrator| MySQL user 
-| orchestrator_mysql_password | changeit| MySQL password
+| orchestrator_mysql_password | changeit| MySQL password <br> :boom: **Please change it otherwise the role will fail**
 | orchestrator_mysql_host | 127.0.0.1| MySQL host
 | orchestrator_dbport | 3306| MySQL port
 | orchestrator_image | indigodatacloud/orchestrator:pr-286| Orchestrator docker image
