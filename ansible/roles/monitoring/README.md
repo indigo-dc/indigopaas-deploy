@@ -1,38 +1,47 @@
-Role Name
+monitoring
 =========
 
-A brief description of the role goes here.
+Deploy INDIGO Monitoring service using docker containers. <br>
+The tasks included in the role are based on the Monitoring [guide](https://indigo-dc.gitbooks.io/monitoring/content/). <br>
+
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+The role should be used to deploy the INDIGO Monitoring pillar on two different machines:
+ - the server node, running the Zabbix server
+ - the agent node, running the Zabbix agent and the INDIGO Zabbix Wrapper
+
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+| monitoring_conf_dir | /etc/monitoring | Directory used to save the service configuration (env files for docker containers) 
+| monitoring_zabbix_conf_dir | /etc/zabbix| Directory used to save the conf files of the Zabbix probes
+| monitoring_mysql_user | zabbix| MySQL user 
+| monitoring_mysql_password | changeit| MySQL password. <br> :boom: **Please change it otherwise the role will fail**
+| monitoring_mysql_root_password | changeit| MySQL root password. <br> :boom: **Please change it otherwise the role will fail** 
+| monitoring_zabbix_password | zabbix| Zabbix Admin password. <br> :boom: **Please change it otherwise the role will fail**
+| monitoring_zabbix_wrapper_image | indigodatacloud/zabbix-wrapper:indigo_2 | Docker image for Zabbix Wrapper
+| monitoring_zabbix_url | "http |//{{monitoring_server_host}}/api_jsonrpc.php"| 
+| monitoring_agent_host | "{{ansible_default_ipv4.address}}"| Address of the Zabbix agent
+| monitoring_server_host | "{{ groups['monitoring-server'][0] }}"| Address of the Zabbix server
+| monitoring_cmdb_location | "https |//{{ groups['proxy'][0] }}/cmdb" | CMDB endpoint
+| monitoring_iam_token_url | https://endpoint/token | IAM token endpoint
+| monitoring_iam_username || IAM username
+| monitoring_iam_password || IAM password
+| monitoring_iam_client || IAM client ID
+| monitoring_iam_secret || IAM client secret
+| monitoring_iam_organization_name | | IAM organization name
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+indigo-dc.docker
 
-Example Playbook
-----------------
-
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
-
-License
--------
-
-BSD
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Marica Antonacci (marica.antonacci@ba.infn.it) <br>
+INFN Italy
