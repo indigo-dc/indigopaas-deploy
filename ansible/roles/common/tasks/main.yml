@@ -1,0 +1,13 @@
+---
+- name: Check python is installed
+  raw:  test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+  changed_when: false
+
+- name: Download docker role
+  local_action: command ansible-galaxy install indigo-dc.docker
+  changed_when: false
+
+- include_role: 
+    name: indigo-dc.docker
+
+
