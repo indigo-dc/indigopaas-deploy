@@ -20,6 +20,8 @@
   template:
     src=mysql-env.j2 dest="{{ im_conf_dir }}/.mysqlenv"
 
+- name: Copy ansible.cfg
+  copy: src="files/ansible.cfg" dest="{{ im_conf_dir }}/ansible.cfg" 
 
 - name: Start mysql
   docker_container: 
@@ -57,7 +59,9 @@
     state: started
     network_mode: "host"
     volumes:
+    - "{{im_log_dir}}:/var/log/im"
     - "{{im_conf_dir}}/im.cfg:/etc/im/im.cfg"
+    - "{{im_conf_dir}}/ansible.cfg:/etc/ansible/ansible.cfg"
     restart_policy: always
     env_file: "{{ im_conf_dir }}/.imenv"
 

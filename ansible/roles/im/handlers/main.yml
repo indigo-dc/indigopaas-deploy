@@ -1,2 +1,7 @@
 ---
 # handlers file for indigopaas
+- name: restart im
+  docker_container:
+    name: im
+    state: started
+    restart: yes
