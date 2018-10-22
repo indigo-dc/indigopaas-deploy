@@ -16,6 +16,8 @@ The role should be used to deploy the INDIGO Monitoring pillar on two different 
 Role Variables
 --------------
 
+| Variable name  | Default Value | Description
+| -------------- | ------------- |------------- |
 | monitoring_conf_dir | /etc/monitoring | Directory used to save the service configuration (env files for docker containers) 
 | monitoring_zabbix_conf_dir | /etc/zabbix| Directory used to save the conf files of the Zabbix probes
 | monitoring_mysql_user | zabbix| MySQL user 
