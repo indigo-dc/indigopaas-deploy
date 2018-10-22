@@ -1,0 +1,4 @@
+cloud-providers-zones:
+{% for provider in cloud_providers.json|json_query("rows[].id") %}
+   - name: {{ provider }}
+{% endfor %}

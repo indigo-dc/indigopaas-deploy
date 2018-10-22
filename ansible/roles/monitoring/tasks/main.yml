@@ -1,0 +1,94 @@
+---
+# tasks file for indigopaas.slam
+
+- name: "Check input variables"
+  fail:
+    msg: "Change the password: you are using <<changeit>> as value for one or more variables (monitoring_mysql_root_password, monitoring_mysql_password) " 
+  when: item == "changeit"
+  with_items:
+    - "{{monitoring_mysql_root_password}}"
+    - "{{monitoring_mysql_password}}"
+
+
+- name: "Check input variables"
+  fail:
+    msg: "Change the password: you are using <<zabbix>> as value for Zabbix Admin password! Change the value of the variable monitoring_zabbix_password"
+  when: item == "zabbix"
+  with_items:
+    - "{{monitoring_zabbix_password}}"
+
+- name: "Select node type"
+  block:
+    - set_fact:
+        monitoring_node_type: agent
+      when: "'monitoring-agent' in group_names"
+    - set_fact:
+        monitoring_node_type: server
+      when: "'monitoring-server' in group_names"
+
+- name: "Install docker-compose"
+  pip: name="docker-compose" state="present"
+
+- name: "create directory path to store the configuration files" 
+  file:
+    path: "{{ monitoring_conf_dir }}"
+    state: directory
+    mode: 0755
+
+- name: "Create the containers env file"
+  template:
+    src="docker-compose-{{monitoring_node_type}}.j2" dest="{{ monitoring_conf_dir }}/docker-compose.yml"
+
+
+- name: "Start the services"
+  docker_service:
+    project_src: "{{ monitoring_conf_dir }}"
+    state: present
+
+
+- name: "Check if the web api are available"
+  run_once: true
+  uri: 
+     url: "{{monitoring_zabbix_url}}"
+     validate_certs: "no"
+     method: POST
+     status_code: 200
+     headers:
+        Content-Type: "application/json-rpc"
+     body: '{ "jsonrpc": "2.0", "method": "apiinfo.version", "params": [], "id": 1 }'
+     body_format: json
+     return_content: yes
+  register: response
+  until: response.json is defined and response.json.result is defined and response.json.result == "3.2.11"
+  retries: 20
+  delay: 30 
+
+#- debug:
+#    msg: "Response: {{response}}"
+
+- name: "Reset zabbix Admin password"
+  command: "docker-compose exec zabbix-db mysql -u {{monitoring_mysql_user}} -p{{monitoring_mysql_password}} zabbix -e \"update users set passwd=md5('{{monitoring_zabbix_password}}') where alias='{{monitoring_zabbix_username}}'\"" 
+  args:
+    chdir: "{{ monitoring_conf_dir }}"
+  when: 
+   - monitoring_node_type == "server"
+
+- name: "Start zabbix wrapper container"
+  docker_container:
+    name: indigo-zabbix-wrapper
+    image: "{{monitoring_zabbix_wrapper_image}}"
+    env:
+      ZABBIX_URL: "{{monitoring_zabbix_url}}"
+      ZABBIX_USERNAME: "{{monitoring_zabbix_username}}"
+      ZABBIX_PASSWORD: "{{monitoring_zabbix_password}}"
+    restart_policy: always
+    network_mode: bridge
+    published_ports:
+       - 8082:8080
+  when: 
+     - monitoring_node_type == "agent"
+
+
+- import_tasks: install-probes.yml
+  when:
+     - monitoring_node_type == "agent"

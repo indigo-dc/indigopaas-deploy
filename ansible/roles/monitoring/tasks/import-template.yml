@@ -1,0 +1,21 @@
+---
+- set_fact:
+    zabbix_template: "{{lookup('file', 'files/' ~ zabbix_template_file) | replace('<?xml version=\"1.0\" encoding=\"UTF-8\"?>', '<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\"?>') | replace('\n','') }}"
+
+#- debug:
+#    msg="{{ lookup('template', 'templates/zabbix_configuration.import_request.j2') }}"
+#  tags:
+#     - login
+
+- name: Import template
+  uri:
+    url: "{{monitoring_zabbix_url}}"
+    validate_certs: "no"
+    method: POST
+    status_code: 200
+    headers:
+       Content-Type: "application/json-rpc"
+    body: "{{ lookup('template', 'templates/zabbix_configuration.import_request.j2') }}"
+    body_format: json
+    return_content: yes
+  register: import_response

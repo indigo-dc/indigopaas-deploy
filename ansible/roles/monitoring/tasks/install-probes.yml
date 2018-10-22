@@ -1,0 +1,54 @@
+---
+- name: Install OpenJDK 8 (Ubuntu)
+  apt: name=openjdk-8-jre-headless state=present update_cache=yes
+
+- name: Install Openstack probe (Ubuntu)
+  apt: deb="{{monitoring_openstack_probe_deb}}" state=present
+
+- name: "create directory path to store the configuration files"
+  file:
+    path: "{{ monitoring_zabbix_conf_dir }}"
+    state: directory
+    mode: 0755
+
+- name: Configuration creation
+  template: src=openstackprobe.properties.j2 dest="{{ monitoring_zabbix_conf_dir }}/openstackprobe.properties"
+
+- name: Get list of provider from cmdb
+  uri: 
+    url: "{{monitoring_cmdb_location}}/provider/list"
+    return_content: yes
+  register: cloud_providers  
+
+- name: Configuration creation
+  template: src=oszones.yml.j2 dest="{{ monitoring_zabbix_conf_dir }}/oszones.yml"
+
+- name: Configure cron job
+  cron:
+    name: "openstack probe"
+    minute: "*/10"
+    job: "java -jar /usr/share/java/zabbix//openstack-zabbix-probe-1.2-jar-with-dependencies.jar >> /var/log/openstackprobe.log 2>&1"
+    cron_file: openstackprobe
+    user: root
+
+- name: Get zabbix login token
+  uri:
+    url: "{{monitoring_zabbix_url}}"
+    validate_certs: "no"
+    method: POST
+    status_code: 200
+    headers:
+       Content-Type: "application/json-rpc"
+    body: "{{ lookup('template', 'templates/zabbix_login_request.j2') }}"
+    body_format: json
+    return_content: yes
+  register: login_response 
+
+- set_fact:
+    zabbix_auth_token: "{{login_response.json.result}}"
+
+- include: import-template.yml
+  with_items: '{{ zabbix_template_list }}'
+  loop_control:
+    loop_var: zabbix_template_file
+
