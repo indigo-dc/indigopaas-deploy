@@ -16,5 +16,6 @@
     - { section: "im", option: "OIDC_ISSUERS", value: "{{im_cfg_oidc_issuers|join('')}}" }
     - { section: "im", option: "OIDC_CLIENT_ID", value: "{{im_cfg_oidc_client_id}}" }
     - { section: "im", option: "OIDC_CLIENT_SECRET", value: "{{im_cfg_oidc_client_secret}}" }
+    - { section: "im", option: "SSH_REVERSE_TUNNELS", value: "{{im_cfg_ssh_reverse_tunnels}}" }
   notify:
    - restart im

@@ -20,5 +20,6 @@ im_cfg_ansible_install_timeout: 500
 im_cfg_oidc_issuers: 'https://iam-test.indigo-datacloud.eu/'
 im_cfg_oidc_client_id:
 im_cfg_oidc_client_secret:
+im_cfg_ssh_reverse_tunnels: 'True'
 
 
