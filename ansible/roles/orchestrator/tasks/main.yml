@@ -82,6 +82,20 @@
   template: 
     src=orchestrator-application.j2 dest="{{ orchestrator_conf_dir }}/application.yml"
 
+- set_fact:
+    volumes_to_mount:
+       - "{{orchestrator_conf_dir}}/application.yml:/orchestrator/application.yml"
+
+- block:
+    - get_url:
+        url: "{{orchestrator_custom_types}}"
+        dest: "{{orchestrator_conf_dir}}/custom_types.yaml"
+    - set_fact:
+        volumes_to_mount:
+          - "{{orchestrator_conf_dir}}/application.yml:/orchestrator/application.yml"
+          - "{{orchestrator_conf_dir}}/custom_types.yaml:/tosca/custom_types.yaml"
+  when: orchestrator_custom_types is defined
+
 - name: Start Orchestrator container
   docker_container:
     name: orchestrator
@@ -89,8 +103,7 @@
     detach: true
     state: started
     network_mode: "host"
-    volumes:
-      - "{{orchestrator_conf_dir}}/application.yml:/orchestrator/application.yml"
+    volumes: "{{volumes_to_mount}}"
     restart_policy: always
     env_file: "{{ orchestrator_conf_dir }}/.orchenv"
 

@@ -13,3 +13,6 @@ WORKFLOW_DB_ENDPOINT={{orchestrator_mysql_host}}:{{orchestrator_dbport}}
 WORKFLOW_DB_NAME={{orchestrator_workflow_dbname}}
 WORKFLOW_DB_USER={{orchestrator_mysql_user}}
 WORKFLOW_DB_PWD={{orchestrator_mysql_password}}
+{% if orchestrator_custom_types is defined %}
+TOSCA_DEFINITIONS_INDIGO=file:/tosca/custom_types.yaml
+{% endif %}
