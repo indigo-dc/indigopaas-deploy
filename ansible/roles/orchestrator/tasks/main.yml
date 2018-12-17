@@ -16,6 +16,7 @@
     mode: 0755
   with_items:
     - "{{ orchestrator_conf_dir }}"
+    - "{{orchestrator_conf_dir}}/trusted_certs"
     - "{{ orchestrator_mysql_data_dir }}"
 
 
@@ -85,6 +86,7 @@
 - set_fact:
     volumes_to_mount:
        - "{{orchestrator_conf_dir}}/application.yml:/orchestrator/application.yml"
+       - "{{orchestrator_conf_dir}}/trusted_certs:/orchestrator/trusted_certs"
 
 - block:
     - get_url:
@@ -93,6 +95,7 @@
     - set_fact:
         volumes_to_mount:
           - "{{orchestrator_conf_dir}}/application.yml:/orchestrator/application.yml"
+          - "{{orchestrator_conf_dir}}/trusted_certs:/orchestrator/trusted_certs"
           - "{{orchestrator_conf_dir}}/custom_types.yaml:/tosca/custom_types.yaml"
   when: orchestrator_custom_types is defined
 
