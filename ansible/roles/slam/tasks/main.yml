@@ -55,6 +55,11 @@
      timeout: 600
      connect_timeout: 10
 
+
+- import_tasks: create-keystore.yml
+  when: 
+    - slam_create_keystore 
+
 - name: "Create SLAM container env file"
   template:
     src=slam-env.j2 dest="{{ slam_conf_dir }}/.slamenv"

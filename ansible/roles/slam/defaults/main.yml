@@ -1,6 +1,5 @@
 ---
 # defaults file for indigopaas
-
 slam_conf_dir: /etc/slam
 
 slam_mysql_image: mysql:5.7
@@ -25,6 +24,9 @@ slam_iam_client_secret:
 slam_cmdb_url: http://cmdb.hostname
 slam_onedata_url: https://onedata.indigo-datacloud.eu
 
+slam_create_keystore: false
+letsencrypt_email: ""
+slam_dns_name: ""
 slam_keystore_password: changeit
 slam_keystore_alias: slam
 slam_keystore_path: /etc/slam/KeyStore.jks

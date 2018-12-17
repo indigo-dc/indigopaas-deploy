@@ -1,2 +1,7 @@
 ---
 # handlers file for indigopaas
+- name: restart slam
+  docker_container:
+    name: slam
+    state: started
+    restart: yes
