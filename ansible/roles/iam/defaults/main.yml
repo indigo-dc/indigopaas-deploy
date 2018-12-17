@@ -1,0 +1,81 @@
+---
+# defaults file for indigopaas
+iam_fqdn: indigoiam.cloud.ba.infn.it
+
+iam_conf_dir: /etc/iam
+iam_image_name: indigoiam/iam-login-service
+iam_version: v1.4.0-latest
+iam_image: "{{iam_image_name}}:{{iam_version}}"
+
+iam_mysql_image: mysql:5.5
+iam_db_data_dir: /data/mysql
+iam_mysql_root_password: changeit
+iam_db_name: iam
+iam_db_user: iam
+iam_db_password: changeit
+
+
+iam_profiles: "prod,registration{%- if iam_enable_google_auth==true -%},google{%- endif -%}{%- if iam_enable_saml_auth==true -%},saml{%- endif -%}"
+
+iam_java_opts: "-Dspring.profiles.active={{iam_profiles}} -Djava.security.egd=file:/dev/urandom"
+iam_base_url: "https://{{iam_fqdn}}"
+iam_issuer: "https://{{iam_fqdn}}/"
+iam_use_forwarded_headers: true
+iam_db_host: 127.0.0.1
+iam_db_validation_query: 'SELECT 1'
+iam_organization_name: 'indigo-dc'
+iam_logo_url: resources/images/indigo-logo.png
+iam_topbar_title: "INDIGO IAM for {{iam_organization_name}}"
+
+iam_enable_google_auth: false
+iam_google_client_id: ''
+iam_google_client_secret: ''
+iam_google_redirect_uris: "https://{{iam_fqdn}}/openid_connect_login"
+
+iam_enable_saml_auth: false
+
+iam_admin_email: "admin@{{iam_fqdn}}"
+
+iam_openssl_self_signed:
+  name : "{{iam_fqdn}}" 
+  country: "" 
+  state: "" 
+  city: ""
+  organization: "" 
+  unit: "" 
+  email: "{{iam_admin_email}}" 
+
+
+iam_saml_idp_host: ''
+iam_saml_idp_metadata: ''
+iam_saml_idp_certificate_url: ''
+iam_saml_metadata_require_valid_signature: false
+iam_saml_keystore_password: 's3cret'
+iam_saml_key_password: 's3cret'
+iam_saml_metadata_require_sirtfi: false
+iam_saml_entity_id: "https://{{iam_fqdn}}"
+iam_saml_key_id: ''
+iam_saml_keystore: ''
+iam_saml_metadata_lookup_service_refresh_period_sec: 3600
+iam_saml_login_button_text: Sign in with SAML
+iam_saml_id_resolvers: eduPersonUniqueId,eduPersonTargetedId,eduPersonPrincipalName
+
+iam_notification_disable: false
+iam_notification_from: ''
+iam_notification_task_delay: 30000
+iam_notification_admin_address: indigo-alerts@localhost
+iam_mail_host: localhost
+iam_account_linking_disable: false
+
+nginx_image: nginx
+iam_nginx_hostname: "{{iam_fqdn}}"
+iam_ssl_cert_path: "/etc/letsencrypt/live/{{iam_fqdn}}/fullchain.pem"
+iam_ssl_key_path: "/etc/letsencrypt/live/{{iam_fqdn}}/privkey.pem"
+
+
+#####
+iam_json_web_key_gen_url: "https://github.com/mitreid-connect/json-web-key-generator/archive/json-web-key-generator-0.3.tar.gz"
+iam_json_web_key_path: "json-web-key-generator-json-web-key-generator-{{iam_json_web_key_version}}"
+iam_json_web_key_jar: "json-web-key-generator-{{iam_json_web_key_version}}-jar-with-dependencies.jar"
+iam_json_web_key_version: '0.3'
+
