@@ -25,36 +25,36 @@ The roles, in this first version, have been written for Ubuntu 16.04.
 
 - Edit the file inventory/inventory replacing the IPs
 
-````
-[proxy]
-172.30.24.3
+  ````
+  [proxy]
+  172.30.24.3
 
-[cmdb]
-172.30.24.4
+  [cmdb]
+  172.30.24.4
 
-[slam]
-90.147.75.144
+  [slam]
+  90.147.75.144
 
-[cpr]
-172.30.24.4
+  [cpr]
+  172.30.24.4
 
-[im]
-172.30.24.5
+  [im]
+  172.30.24.5
 
-[monitoring-server]
-172.30.24.6
+  [monitoring-server]
+  172.30.24.6
 
-[monitoring-agent]
-172.30.24.7
+  [monitoring-agent]
+  172.30.24.7
 
-[orchestrator]
-172.30.24.8
+  [orchestrator]
+  172.30.24.8
 
-[monitoring:children]
-monitoring-server
-monitoring-agent
+  [monitoring:children]
+  monitoring-server
+  monitoring-agent
 
-````
+  ````
 
 - Edit the variables in inventory/group_vars
 
