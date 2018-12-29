@@ -1,8 +1,27 @@
+# Requirements
+
+The roles, in this first version, have been written for Ubuntu 16.04.
+
+# Deployment scenario:
+
+
 
 # Configure the control machine
 
-- install ansible
-- install jmespath used by jquery
+- install ansible <br>Recommended installation path: https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#latest-releases-via-apt-ubuntu
 
-````
-apt install python-jmespath
+- install jmespath needed by jquery
+  ````
+  apt install python-jmespath
+  ````
+
+- clone the repository
+  ````
+  git clone https://github.com/indigo-dc/indigopaas-deploy.git
+  ````
+
+
+
+
+
+  
