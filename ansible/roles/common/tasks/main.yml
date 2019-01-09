@@ -4,7 +4,7 @@
   changed_when: false
 
 - name: Download docker role
-  local_action: command ansible-galaxy install indigo-dc.docker
+  local_action: command ansible-galaxy install -p /etc/ansible/roles indigo-dc.docker
   changed_when: false
 
 - include_role: 
