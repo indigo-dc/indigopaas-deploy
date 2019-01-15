@@ -34,8 +34,10 @@ IAM_SAML_ID_RESOLVERS={{iam_saml_id_resolvers}}
 {% endif %}
 #
 IAM_NOTIFICATION_DISABLE={{iam_notification_disable}}
+{% if iam_notification_disable==false -%}
 IAM_NOTIFICATION_FROM={{iam_notification_from}}
 IAM_NOTIFICATION_TASK_DELAY={{iam_notification_task_delay}}
 IAM_NOTIFICATION_ADMIN_ADDRESS={{iam_notification_admin_address}}
 IAM_MAIL_HOST={{iam_mail_host}}
+{% endif %}
 IAM_ACCOUNT_LINKING_DISABLE={{iam_account_linking_disable}}
