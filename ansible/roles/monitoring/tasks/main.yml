@@ -60,8 +60,8 @@
      return_content: yes
   register: response
   until: response.json is defined and response.json.result is defined and response.json.result == "3.2.11"
-  retries: 20
-  delay: 30 
+  retries: 60
+  delay: 60 
 
 #- debug:
 #    msg: "Response: {{response}}"
