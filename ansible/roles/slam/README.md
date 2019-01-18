@@ -24,6 +24,7 @@ Role Variables
 | slam_mysql_dbname | slam| SLAM Mysql DB name
 | slam_mysql_user | slam| SLAM Mysql user name
 | slam_mysql_password | changeit| SLAM Mysql user password <br> **Please change it otherwise the role will fail**
+| slam_mysql_root_password | changeit| SLAM Mysql root password <br> **Please change it otherwise the role will fail**
 | slam_mysql_host | localhost| Mysql host
 | slam_mongo_image | mongo| Docker image for running the document-oriented DB
 | slam_mongo_data_dir | /data/mongo| Persistent data dir for mongo
