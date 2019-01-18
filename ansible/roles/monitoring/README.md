@@ -11,6 +11,12 @@ Requirements
 The role should be used to deploy the INDIGO Monitoring pillar on two different machines:
  - the server node, running the Zabbix server
  - the agent node, running the Zabbix agent and the INDIGO Zabbix Wrapper
+ <br>
+ The integration with IAM requires:
+ 
+ - a valid IAM user (that will be used to run the probes)
+ - the registration of a client with grant type 'password'   
+ 
 
 
 Role Variables
