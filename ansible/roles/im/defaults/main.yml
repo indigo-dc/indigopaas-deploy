@@ -3,8 +3,8 @@
 
 im_conf_dir: /etc/im
 im_log_dir: /var/log/im
-im_mysql_image: mysql
-im_mysql_data_dir: /data/mysql
+im_mysql_image: mysql:5.7
+im_mysql_data_dir: /data/im/mysql
 im_mysql_root_password: changeit
 im_mysql_dbname: im
 im_mysql_user: im
