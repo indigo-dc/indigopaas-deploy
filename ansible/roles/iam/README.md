@@ -44,7 +44,7 @@ providers:
     style: btn-social btn-google
     image:
       fa-icon: google
-```
+````
 
 Role Variables
 --------------
