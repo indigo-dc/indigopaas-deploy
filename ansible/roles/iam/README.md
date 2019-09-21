@@ -6,7 +6,7 @@ This role allows to deploy the INDIGO IAM service.
 Requirements
 ------------
 
-### Google Authentication
+### OIDC Authentication
 If you want to enable Open ID Connect Auth you need to create a new client.
 
 For example, for Google Auth access to Google developers console and create and configure a new credential project.
@@ -51,18 +51,18 @@ Role Variables
 
 | Variable name  | Default Value | Description
 | -------------- | ------------- |------------- |
-|iam_fqdn | indigoiam.cloud.ba.infn.it | Host dns name
-|iam_mysql_root_password | changeit | IAM Mysql root password
-|iam_organization_name | indigo-dc | Organization name
-|iam_logo_url| resources/images/indigo-logo.png | IAM instance logo
-|iam_account_linking_disable| false | Disable account linking
-|iam_mysql_image | mysql:5.7 | MySQL docker image
-|iam_image | indigoiam/iam-login-service:v1.5.0.rc2-SNAPSHOT-latest | IAM Docker image
-|iam_notification_disable | false | Disable IAM notifications
-|iam_notification_from | iam@{{iam_fqdn}} | Notification mail sender
-|iam_enable_oidc_auth | false | enable uthentication with OIDC provider
-|iam_application_oidc_path | application-oidc.yml | OIDC configuration file
-|iam_admin_email | "admin@{{iam_fqdn}}" | Administrator email address
+| iam_fqdn | indigoiam.cloud.ba.infn.it | Host dns name
+| iam_mysql_root_password | changeit | IAM Mysql root password
+| iam_organization_name | indigo-dc | Organization name
+| iam_logo_url| resources/images/indigo-logo.png | IAM instance logo
+| iam_account_linking_disable| false | Disable account linking
+| iam_mysql_image | mysql:5.7 | MySQL docker image
+| iam_image | indigoiam/iam-login-service:v1.5.0.rc2-SNAPSHOT-latest | IAM Docker image
+| iam_notification_disable | false | Disable IAM notifications
+| iam_notification_from | iam@{{iam_fqdn}} | Notification mail sender
+| iam_enable_oidc_auth | false | enable uthentication with OIDC provider
+| iam_application_oidc_path | application-oidc.yml | OIDC configuration file
+| iam_admin_email | "admin@{{iam_fqdn}}" | Administrator email address
 
 Dependencies
 ------------
