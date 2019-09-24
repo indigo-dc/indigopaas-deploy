@@ -1,0 +1,79 @@
+---
+# tasks file for indigopaas.slam
+
+- name: "Check input variables"
+  fail:
+    msg: "Change the password: you are using \"changeit\" as value for one or more variables - slam_mysql_root_password, slam_mysql_password, slam_keystore_password " 
+  when: item == "changeit"
+  with_items:
+    - "{{slam_mysql_root_password}}"
+    - "{{slam_mysql_password}}"
+    - "{{slam_keystore_password}}"
+
+
+- name: "create directory path to store the configuration files" 
+  file:
+    path: "{{ slam_conf_dir }}"
+    state: directory
+    mode: 0755
+
+- name: "Create mysql container env file"
+  template:
+    src=mysql-env.j2 dest="{{ slam_conf_dir }}/.mysqlenv"
+
+
+- name: Start mysql
+  docker_container: 
+    name: slam-mysql
+    image: "{{ slam_mysql_image }}"
+    detach: true
+    state: started
+    network_mode: "host"
+    volumes:
+    - "{{ slam_mysql_data_dir }}:/var/lib/mysql"
+    restart_policy: always
+    env_file: "{{ slam_conf_dir }}/.mysqlenv"
+
+
+- name: Start mongodb
+  docker_container:
+    name: slam-mongo
+    image: "{{ slam_mongo_image }}"
+    detach: true
+    state: started
+    network_mode: "host"
+    volumes:
+    - "{{ slam_mongo_data_dir }}:/data/db"
+    restart_policy: always
+
+
+- name: wait for mysql to be up and running 
+  wait_for: 
+     host: "localhost" 
+     port: "3306"
+     delay: 20
+     timeout: 600
+     connect_timeout: 10
+
+
+- import_tasks: create-keystore.yml
+  when: 
+    - slam_create_keystore 
+
+- name: "Create SLAM container env file"
+  template:
+    src=slam-env.j2 dest="{{ slam_conf_dir }}/.slamenv"
+
+
+- name: Start SLAM container
+  docker_container:
+    name: slam
+    image: "{{ slam_image }}"
+    detach: true
+    state: started
+    network_mode: "host"
+    volumes:
+      - "{{slam_keystore_path}}:/opt/pki/customKeystore.jks"
+    restart_policy: always
+    env_file: "{{ slam_conf_dir }}/.slamenv"
+

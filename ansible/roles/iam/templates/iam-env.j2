@@ -1,0 +1,38 @@
+TZ={{iam_timezone}}
+IAM_JAVA_OPTS={{iam_java_opts}}
+IAM_BASE_URL={{iam_base_url}}
+IAM_ISSUER={{iam_issuer}}
+IAM_USE_FORWARDED_HEADERS={{iam_use_forwarded_headers}}
+IAM_KEY_STORE_LOCATION=file://{{ iam_conf_dir }}/keystore.jks
+IAM_DB_HOST={{iam_db_host}}
+IAM_DB_NAME={{iam_db_name}}
+IAM_DB_USERNAME={{iam_db_user}}
+IAM_DB_PASSWORD={{iam_db_password}}
+IAM_DB_VALIDATION_QUERY={{iam_db_validation_query}}
+#
+IAM_ORGANISATION_NAME={{iam_organization_name}}
+IAM_LOGO_URL={{iam_logo_url}}
+IAM_TOPBAR_TITLE={{iam_topbar_title}}
+#
+{% if iam_enable_saml_auth==true -%}
+IAM_SAML_IDP_METADATA={{iam_saml_idp_metadata}}
+IAM_SAML_METADATA_REQUIRE_VALID_SIGNATURE={{iam_saml_metadata_require_valid_signature}}
+IAM_SAML_METADATA_LOOKUP_SERVICE_REFRESH_PERIOD_SEC={{iam_saml_metadata_lookup_service_refresh_period_sec}}
+IAM_SAML_KEYSTORE_PASSWORD={{iam_saml_keystore_password}}
+IAM_SAML_KEY_PASSWORD={{iam_saml_key_password}}
+IAM_SAML_METADATA_REQUIRE_SIRTFI={{iam_saml_metadata_require_sirtfi}}
+IAM_SAML_ENTITY_ID={{iam_saml_entity_id}}
+IAM_SAML_KEY_ID={{iam_saml_key_id}}
+IAM_SAML_KEYSTORE={{iam_saml_keystore}}
+IAM_SAML_LOGIN_BUTTON_TEXT=Sign in with INFN AAI
+IAM_SAML_ID_RESOLVERS={{iam_saml_id_resolvers}}
+{% endif %}
+#
+IAM_NOTIFICATION_DISABLE={{iam_notification_disable}}
+{% if iam_notification_disable==false -%}
+IAM_NOTIFICATION_FROM={{iam_notification_from}}
+IAM_NOTIFICATION_TASK_DELAY={{iam_notification_task_delay}}
+IAM_NOTIFICATION_ADMIN_ADDRESS={{iam_notification_admin_address}}
+IAM_MAIL_HOST={{iam_mail_host}}
+{% endif %}
+IAM_ACCOUNT_LINKING_DISABLE={{iam_account_linking_disable}}

@@ -1,0 +1,119 @@
+---
+# tasks file for indigopaas.iam
+
+- name: "create directory path to store the configuration files" 
+  file:
+    path: "{{ iam_conf_dir }}"
+    state: directory
+    mode: 0755
+  tags:
+    - iam
+
+- name: "Create mysql container env file"
+  template:
+    src=mysql-env.j2 dest="{{ iam_conf_dir }}/.mysqlenv"
+  tags:
+    - iam
+
+- name: "Copy application-oidc.yml for oidc configuration"
+  copy:
+    src: "{{ iam_application_oidc_path }}"
+    dest: "{{ iam_conf_dir }}/application-oidc.yml"
+  when: iam_enable_oidc_auth == true 
+  tags:
+    - iam
+
+- name: Start mysql
+  docker_container: 
+    name: iam-database
+    image: "{{ iam_mysql_image }}"
+    detach: true
+    state: started
+    network_mode: "host"
+    volumes:
+    - "{{ iam_db_data_dir }}:/var/lib/mysql"
+    restart_policy: always
+    env_file: "{{ iam_conf_dir }}/.mysqlenv"
+  tags:
+    - iam
+
+- name: wait for mysql to be up and running
+  wait_for:
+     host: "localhost"
+     port: "3306"
+     delay: 20
+     timeout: 600
+     connect_timeout: 10
+
+
+- block:
+     - name: "Download json-web-key-generator"
+       unarchive: 
+         src: "{{iam_json_web_key_gen_url}}"
+         dest: "{{iam_conf_dir}}"
+         remote_src: yes
+     
+     - name: "Compile the json-web-key-generator"
+       shell: "docker run --rm -v $(pwd):/project -w /project/{{iam_json_web_key_path}} maven mvn package"
+       args: 
+         chdir: "{{iam_conf_dir}}"
+         creates: "{{iam_conf_dir}}/{{iam_json_web_key_path}}/target/{{iam_json_web_key_jar}}" 
+     
+     - name: "Create the keys" 
+       shell: docker run --rm -v $(pwd):/project -w "/project/{{iam_json_web_key_path}}" maven java -jar target/{{iam_json_web_key_jar}} -t RSA -s 1024 -S -i rsa1 -o "/project/keystore.jks"
+       args:
+         chdir: "{{iam_conf_dir}}"
+         creates: "{{iam_conf_dir}}/keystore.jks"
+
+
+- block:
+      - template:
+         src=generate_self_signed_cert.sh.j2 mode='u+rwx' dest="{{iam_conf_dir}}/generate_self_signed_cert.sh"
+
+      - name: "Generate the self-signed certificate"
+        shell: "docker run --rm -v $(pwd):/project -w /project maven /project/generate_self_signed_cert.sh"
+        args:
+          chdir: "{{iam_conf_dir}}"
+          creates: "{{iam_conf_dir}}/self-signed.jks"
+
+      - name: "Get IDP certificate"
+        get_url: 
+          url: "{{iam_saml_idp_certificate_url}}"
+          dest: "{{iam_conf_dir}}/{{iam_saml_idp_host}}.cert"
+          
+      - name: "Add IDP certificate to keystore"
+        shell: "docker run --rm -v $(pwd):/project -w /project maven keytool -import -noprompt -trustcacerts -alias {{iam_saml_idp_host}} -file {{iam_saml_idp_host}}.cert -keystore self-signed.jks -storepass {{iam_saml_keystore_password}}"
+        args:
+          chdir: "{{iam_conf_dir}}"
+        register: add_cert_result
+        failed_when: "'error' in add_cert_result.stdout and not('already exists' in add_cert_result.stdout)"
+        changed_when: "'Certificate was added to keystore' in add_cert_result.stderr"
+
+
+  when: iam_enable_saml_auth == true 
+  tags:
+   - iam
+
+
+- name: "Create iam container env file"
+  template:
+    src=iam-env.j2 dest="{{ iam_conf_dir }}/.iamenv"
+  tags:
+    - iam
+
+
+- name: Start iam container
+  docker_container:
+    name: iam-login-service
+    image: "{{ iam_image }}"
+    detach: true
+    state: started
+    network_mode: "host"
+    volumes:
+    - "{{ iam_conf_dir }}:{{ iam_conf_dir }}"
+    - "{{ iam_conf_dir }}/application-oidc.yml:/indigo-iam/config/application-oidc.yml:ro"
+    restart_policy: always
+    env_file: "{{ iam_conf_dir }}/.iamenv"
+  tags:
+    - iam
+

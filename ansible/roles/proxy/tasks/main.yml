@@ -1,0 +1,27 @@
+---
+- name: Check variable letsencrypt_email
+  fail:
+    msg: "Empty value not allowed for variable letsencrypt_email"
+  when: letsencrypt_email|trim == '' 
+
+- name: Check variable domain_name
+  fail:
+    msg: "Empty value not allowed for variable domain_name"
+  when: domain_name|trim == ''
+
+- name: Install letsencrypt
+  apt: name=letsencrypt state=present update_cache=true
+
+- name: Create letsencrypt certificate
+  shell: letsencrypt certonly -n --standalone -m {{ letsencrypt_email }} --agree-tos -d {{ domain_name }}
+  args:
+    creates: /etc/letsencrypt/live/{{ domain_name }}
+
+- name: Install nginx
+  apt: name=nginx state=latest
+
+- name: Create nginx conf
+  template: src=nginx-default.j2 dest=/etc/nginx/sites-available/default
+  notify: 
+    - restart nginx
+

@@ -1,0 +1,15 @@
+java.keystore=/etc/ssl/certs/java/cacerts
+zabbix.ip={{monitoring_server_host}}
+zabbix.wrapper.location=http://{{monitoring_agent_host}}:8082
+cmdb.location={{monitoring_cmdb_location}}
+wait.real.vm.creation=true
+is-iam-authenticated=true
+iam.location={{monitoring_iam_token_url}}
+iam.username={{monitoring_iam_username}}
+iam.password={{monitoring_iam_password}}
+iam.clientid={{monitoring_iam_client}}
+iam.clientsecret={{monitoring_iam_secret}}
+openstack.project={{monitoring_openstack_project}}
+providers.exceptions=true
+iam.protocol=oidc
+iam.identity.provider={{monitoring_iam_organization_name}}

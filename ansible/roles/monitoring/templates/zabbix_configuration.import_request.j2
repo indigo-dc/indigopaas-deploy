@@ -1,0 +1,31 @@
+{
+    "jsonrpc": "2.0",
+    "method": "configuration.import",
+    "params": {
+        "format": "xml",
+        "rules": {
+            "groups": {
+                "createMissing": true
+            },
+            "applications": {
+                "createMissing": true
+            },
+            "templates": {
+                "createMissing": true
+            },
+            "hosts": {
+                "createMissing": true,
+                "updateExisting": true
+            },
+            "items": {
+                "createMissing": true,
+                "updateExisting": true,
+                "deleteMissing": true
+            }
+        },
+        "source": "{{zabbix_template}}"
+    }, 
+    "auth": "{{zabbix_auth_token}}",
+    "id": 1
+}
+    

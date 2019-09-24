@@ -1,0 +1,4 @@
+---
+# defaults file for indigopaas
+cpr_port: 8081
+cpr_image: indigodatacloud/cloudproviderranker:indigo_2

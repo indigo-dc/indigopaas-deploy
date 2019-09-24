@@ -1,0 +1,90 @@
+---
+# tasks file for indigopaas/cmdb
+
+- name: "Check parameters"
+  fail:
+    msg: "Change the password set in variable cmdb_crud_password"
+  when: cmdb_crud_password == "changeit" 
+
+- name: "create directory path to store the configuration files" 
+  file:
+    path: "{{ cmdb_conf_dir }}"
+    state: directory
+    mode: 0755
+  tags:
+    - cmdb
+
+- name: "Create couchdb container env file"
+  template:
+    src=couchdb-env.j2 dest="{{ cmdb_conf_dir }}/.couchdbenv"
+  tags:
+    - cmdb
+
+
+- name: Start CouchDB container
+  docker_container:
+    name: couchdb
+    image: "{{ couchdb_image }}"
+    detach: true
+    state: started
+    network_mode: "host"
+    volumes:
+    - "{{ couchdb_data_dir }}:/usr/local/var/lib/couchdb"
+    restart_policy: always
+    env_file: "{{ cmdb_conf_dir }}/.couchdbenv"
+  tags:
+    - cmdb
+
+
+- name: "Perform initialization steps"
+  block:
+    #- name: "Download cmdb source code"
+    - unarchive: 
+        src: https://github.com/indigo-dc/cmdb/archive/v0.4.tar.gz
+        dest: "{{ cmdb_conf_dir }}"
+        remote_src: yes
+        creates: "{{ cmdb_conf_dir }}/cmdb-0.4/pom.xml"
+    
+    #- name: "Fix config.js"
+    - replace: 
+        path: "{{ cmdb_conf_dir }}/cmdb-0.4/indigo-schema-couch/config.js"
+        regexp: "username:password@host"
+        replace: "{{cmdb_crud_username}}:{{cmdb_crud_password}}@{{ansible_default_ipv4.address}}"
+    
+    #- name: "Fix config.js"
+    - replace: 
+        path: "{{ cmdb_conf_dir }}/cmdb-0.4/indigo-schema-couch/config.js"
+        regexp: "dbname"
+        replace: "indigo-cmdb-v2"
+    
+    #- name: "Compile cmdb"
+    - shell: docker run --rm -v $(pwd)/cmdb-0.4:/cmdb -w /cmdb/indigo-schema-couch node /bin/bash -c 'npm install && nodejs index.js'
+      args:
+         chdir: "{{cmdb_conf_dir}}"
+         creates: "{{cmdb_conf_dir}}/cmdb-0.4/indigo-schema-couch/package-lock.json"
+  tags:
+    - cmdb
+
+
+- name: "Create CMDB container env file"
+  template:
+    src=cmdb-env.j2 dest="{{ cmdb_conf_dir }}/.cmdbenv"
+  tags:
+    - cmdb
+
+
+- name: Start CMDB container
+  docker_container: 
+    name: cmdb
+    image: "{{ cmdb_image }}"
+    detach: true
+    state: started
+    network_mode: "host"
+    volumes:
+    - "{{ cmdb_data_dir }}:/tmp"
+    restart_policy: always
+    env_file: "{{ cmdb_conf_dir }}/.cmdbenv"
+  tags:
+    - cmdb
+
+

@@ -1,0 +1,14 @@
+---
+# tasks file for indigopaas
+
+- assert:
+   that: 
+     - iam_saml_key_password | length > 5
+     - iam_saml_keystore_password | length > 5
+   msg: "'iam_saml_key_password' and/or 'iam_saml_keystore_password' too short - must be at least 6 characters"
+  when: iam_enable_saml_auth == true 
+  tags:
+   - iam
+
+- include: iam.yml
+- include: nginx.yml

@@ -1,0 +1,83 @@
+server {
+      listen         80;
+      server_name    {{domain_name}};
+      return         301 https://$server_name$request_uri;
+}
+
+server {
+  listen        443 ssl;
+  server_name  {{domain_name}};
+  access_log   /var/log/nginx/proxy-paas.access.log  combined;
+
+  ssl on;
+  ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+  ssl_certificate           {{proxy_certificate_path}};
+  ssl_certificate_key       {{proxy_certificate_key_path}};
+  ssl_trusted_certificate   {{proxy_trusted_certificate_path}};
+
+{% if "cmdb" in groups %}
+  location /cmdb/ {
+    proxy_pass              http://{{groups['cmdb'][0]}}:5984/indigo-cmdb-v2/_design/schema/_rewrite/;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        X-Forwarded-Proto https;
+    proxy_set_header        Host $http_host;
+    proxy_redirect          http:// https://;
+  }
+{% endif %}
+{% if "cmdb" in groups %}
+  location /couch/ {
+    proxy_pass              http://{{groups['cmdb'][0]}}:5984/;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        X-Forwarded-Proto https;
+    proxy_set_header        Host $http_host;
+    proxy_redirect          http:// https://;
+  }
+{% endif %}
+
+{% if "cpr" in groups %}
+  location /cpr/ {
+    proxy_pass              http://{{groups['cpr'][0]}}:{{cpr_port}}/;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        X-Forwarded-Proto https;
+    proxy_set_header        Host $http_host;
+    proxy_redirect          http:// https://;
+  }
+
+{% endif %}
+{% if "im" in groups %}
+  location /im/ {
+    proxy_read_timeout      600;
+    proxy_connect_timeout   159s;
+    proxy_send_timeout      600;
+    proxy_pass              http://{{groups['im'][0]}}:8800/;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        X-Forwarded-Proto https;
+    proxy_set_header        Host $http_host;
+    proxy_redirect          http:// https://;
+    proxy_set_header        X-Forwarded-Prefix /im;
+  }
+{% endif %}
+{% if "orchestrator" in groups %}
+  location /orchestrator/ {
+    proxy_read_timeout      600;
+    proxy_connect_timeout   159s;
+    proxy_send_timeout      600;
+    proxy_pass              http://{{groups['orchestrator'][0]}}:8080/;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        X-Forwarded-Proto https;
+    proxy_set_header        Host $http_host;
+    proxy_redirect          http:// https://;
+    proxy_set_header        X-Forwarded-Prefix /orchestrator;
+  }
+{% endif %}
+
+  location / {
+      internal;
+  }
+
+}

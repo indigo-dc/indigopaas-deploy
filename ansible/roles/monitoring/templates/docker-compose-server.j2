@@ -1,0 +1,51 @@
+version: '2.1'
+services:
+  zabbix-web:
+    container_name: zabbix-web
+    ports:
+     - "80:80"
+    image: zabbix/zabbix-web-apache-mysql:alpine-3.2-latest
+    restart: always
+    depends_on:
+       zabbix-server:
+         condition: service_started
+       zabbix-db:
+         condition: service_healthy
+    environment:
+     - MYSQL_USER={{monitoring_mysql_user}}
+     - MYSQL_PASSWORD={{monitoring_mysql_password}}
+     - DB_SERVER_HOST=zabbix-db
+     - ZBX_SERVER_HOST=zabbix-server
+    links:
+     - zabbix-db:zabbix-db
+     - zabbix-server:zabbix-server
+  zabbix-server:
+    container_name: zabbix-server
+    ports:
+     - "10051:10051"
+    image: zabbix/zabbix-server-mysql:alpine-3.2-latest
+    restart: always
+    depends_on:
+     - zabbix-db
+    environment:
+     - MYSQL_USER={{monitoring_mysql_user}}
+     - MYSQL_PASSWORD={{monitoring_mysql_password}}
+     - DB_SERVER_HOST=zabbix-db
+     - MYSQL_DATABASE=zabbix
+    links:
+     - zabbix-db:zabbix-db
+  zabbix-db:
+    container_name: zabbix-db
+    image: mysql:5.7
+    restart: always
+    environment:
+     - MYSQL_USER={{monitoring_mysql_user}}
+     - MYSQL_PASSWORD={{monitoring_mysql_password}}
+     - MYSQL_DATABASE=zabbix
+     - MYSQL_ROOT_PASSWORD={{monitoring_mysql_root_password}}
+    healthcheck:
+        test: "/usr/bin/mysql --user=root --password={{monitoring_mysql_root_password}} --execute \"SHOW DATABASES;\""
+        interval: 30s
+        timeout: 20s
+        retries: 10
+

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+openssl req -newkey rsa:2048 -nodes -x509 -days 3650  -keyout self-signed.key.pem -subj "/C={{ iam_openssl_self_signed.country }}/ST={{ iam_openssl_self_signed.state }}/L={{ iam_openssl_self_signed.city }}/O={{ iam_openssl_self_signed.organization }}/OU={{ iam_openssl_self_signed.unit }}/CN={{ iam_openssl_self_signed.name }}/emailAddress={{ iam_openssl_self_signed.email }}/" -out self-signed.cert.pem
+
+openssl pkcs12 -export -inkey self-signed.key.pem  -name self-signed -in self-signed.cert.pem -password "pass:{{iam_saml_key_password}}" -out self-signed.p12
+
+keytool -importkeystore -noprompt -destkeystore self-signed.jks -deststorepass "{{iam_saml_keystore_password}}" -srckeystore self-signed.p12 -srcstorepass "{{iam_saml_key_password}}" -srcstoretype PKCS12
