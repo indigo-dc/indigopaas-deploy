@@ -4,10 +4,10 @@ iam_fqdn: indigoiam.cloud.ba.infn.it
 
 iam_conf_dir: /etc/iam
 iam_image_name: indigoiam/iam-login-service
-iam_version: v1.4.0-latest
+iam_version: v1.5.0.rc6-SNAPSHOT-latest
 iam_image: "{{iam_image_name}}:{{iam_version}}"
 
-iam_mysql_image: mysql:5.5
+iam_mysql_image: mysql:5.7
 iam_db_data_dir: /data/mysql
 iam_mysql_root_password: changeit
 iam_db_name: iam
@@ -15,8 +15,9 @@ iam_db_user: iam
 iam_db_password: changeit
 
 
-iam_profiles: "prod,registration{%- if iam_enable_google_auth==true -%},google{%- endif -%}{%- if iam_enable_saml_auth==true -%},saml{%- endif -%}"
+iam_profiles: "prod,registration{%- if iam_enable_oidc_auth==true -%},oidc{%- endif -%}{%- if iam_enable_saml_auth==true -%},saml{%- endif -%}"
 
+iam_timezone: "Europe/Rome"
 iam_java_opts: "-Dspring.profiles.active={{iam_profiles}} -Djava.security.egd=file:/dev/urandom"
 iam_base_url: "https://{{iam_fqdn}}"
 iam_issuer: "https://{{iam_fqdn}}/"
@@ -27,10 +28,8 @@ iam_organization_name: 'indigo-dc'
 iam_logo_url: resources/images/indigo-logo.png
 iam_topbar_title: "INDIGO IAM for {{iam_organization_name}}"
 
-iam_enable_google_auth: false
-iam_google_client_id: ''
-iam_google_client_secret: ''
-iam_google_redirect_uris: "https://{{iam_fqdn}}/openid_connect_login"
+iam_enable_oidc_auth: false
+iam_application_oidc_path: "application-oidc.yml"
 
 iam_enable_saml_auth: false
 

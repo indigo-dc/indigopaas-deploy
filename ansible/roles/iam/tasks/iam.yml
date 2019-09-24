@@ -15,6 +15,13 @@
   tags:
     - iam
 
+- name: "Copy application-oidc.yml for oidc configuration"
+  copy:
+    src: "{{ iam_application_oidc_path }}"
+    dest: "{{ iam_conf_dir }}/application-oidc.yml"
+  when: iam_enable_oidc_auth == true 
+  tags:
+    - iam
 
 - name: Start mysql
   docker_container: 
@@ -104,6 +111,7 @@
     network_mode: "host"
     volumes:
     - "{{ iam_conf_dir }}:{{ iam_conf_dir }}"
+    - "{{ iam_conf_dir }}/application-oidc.yml:/indigo-iam/config/application-oidc.yml:ro"
     restart_policy: always
     env_file: "{{ iam_conf_dir }}/.iamenv"
   tags:
