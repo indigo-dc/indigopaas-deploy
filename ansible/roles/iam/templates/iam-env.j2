@@ -1,3 +1,4 @@
+TZ={{iam_timezone}}
 IAM_JAVA_OPTS={{iam_java_opts}}
 IAM_BASE_URL={{iam_base_url}}
 IAM_ISSUER={{iam_issuer}}
@@ -12,12 +13,6 @@ IAM_DB_VALIDATION_QUERY={{iam_db_validation_query}}
 IAM_ORGANISATION_NAME={{iam_organization_name}}
 IAM_LOGO_URL={{iam_logo_url}}
 IAM_TOPBAR_TITLE={{iam_topbar_title}}
-#
-{% if iam_enable_google_auth==true -%}
-IAM_GOOGLE_CLIENT_ID={{iam_google_client_id}}
-IAM_GOOGLE_CLIENT_SECRET={{iam_google_client_secret}}
-IAM_GOOGLE_REDIRECT_URIS={{iam_google_redirect_uris}}
-{% endif %}
 #
 {% if iam_enable_saml_auth==true -%}
 IAM_SAML_IDP_METADATA={{iam_saml_idp_metadata}}
