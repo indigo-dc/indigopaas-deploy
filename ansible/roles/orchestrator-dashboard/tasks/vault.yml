@@ -1,0 +1,107 @@
+---
+- name: "Check if {{ dashboard_vault_secrets_path }} path exists"
+  uri:
+    url: "{{ dashboard_vault_url }}/v1/sys/mounts"
+    headers:
+      X-Vault-Token: "{{ dashboard_vault_token }}"
+  register: secret_path_results
+  tags:
+    - dashboard
+
+- name: Enable secrets path
+  uri:
+    url: "{{ dashboard_vault_url }}/v1/sys/mounts/{{ dashboard_vault_secrets_path }}"
+    method: POST
+    headers:
+      X-Vault-Token: "{{ dashboard_vault_token }}"
+    body: '{"type": "kv-v2"}'
+    status_code: 204  
+  when: not secret_path_results.json['data'][dashboard_vault_secrets_path+'/'] is defined
+  tags:
+    - dashboard
+
+- name: "Check if jwt auth exists"
+  uri:
+    url: "{{ dashboard_vault_url }}/v1/sys/auth"
+    headers:
+      X-Vault-Token: "{{ dashboard_vault_token }}"
+  register: jwt_enable_result
+  tags:
+    - dashboard
+
+- name: Enable jwt auth on Vault
+  uri:
+    url: "{{ dashboard_vault_url }}/v1/sys/auth/jwt"
+    method: POST
+    headers:
+      X-Vault-Token: "{{ dashboard_vault_token }}"
+    body: '{"type": "jwt"}'
+    status_code: 204
+  when: not jwt_enable_result['json']['data']['jwt/'] is defined
+  tags:
+    - dashboard
+
+- name: Configure jwt method on Vault
+  uri:
+    url: "{{ dashboard_vault_url }}/v1/auth/jwt/config"
+    method: POST
+    headers:
+      X-Vault-Token: "{{ dashboard_vault_token }}"
+    body: '{"oidc_discovery_url": "{{ dashboard_iam_issuer }}", "oidc_client_id": "{{ dashboard_vault_iam_client_id }}", "oidc_client_secret": "{{ dashboard_vault_iam_client_secret }}", "default_role": "{{ dashboard_vault_default_role }}"}'
+    body_format: json
+    status_code: 204
+  tags:
+    - dashboard
+
+- name: Configure jwt role on Vault
+  uri:
+    url: "{{ dashboard_vault_url }}/v1/auth/jwt/role/{{ dashboard_vault_default_role }}"
+    method: POST
+    headers:
+      X-Vault-Token: "{{ dashboard_vault_token }}"
+    body: '{"role_type": "jwt", "bound_audiences": "{{ dashboard_bound_audience }}", "user_claim": "sub", "policies": "kv-2", "claim_mappings": {"email": "email"}}'
+    body_format: json
+    status_code: 204
+  tags:
+    - dashboard
+
+- name: "Get jwt accessor for policy configuration"
+  uri:
+    url: "{{ dashboard_vault_url }}/v1/sys/auth"
+    headers:
+      X-Vault-Token: "{{ dashboard_vault_token }}"
+  register: jwt_enable_result
+  tags:
+    - dashboard
+
+- set_fact:
+    jwt_accessor: "{{ jwt_enable_result['json']['data']['jwt/']['accessor'] }}"
+  tags:
+    - dashboard
+
+- debug:
+    msg: "{{ jwt_accessor }}"
+  tags:
+    - dashboard
+
+- name: Create vault policies
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ dashboard_vault_config_dir }}/{{ item.dest }}"
+  with_items:
+    - { src: "kv-2.hcl.j2", dest: "kv-2.hcl" }
+    - { src: "write_only.hcl.j2", dest: "write_only.hcl" }
+    - { src: "read_only.hcl.j2", dest: "read_only.hcl" }
+    - { src: "delete_only.hcl.j2", dest: "delete_only.hcl" }
+  tags:
+    - dashboard
+
+- name: Import vault policies
+  shell: 'docker run --rm --privileged -e VAULT_ADDR={{ dashboard_vault_url }} -v {{ dashboard_vault_config_dir }}:/vault/config vault /bin/sh -c "vault login {{dashboard_vault_token}} && vault policy write {{ item.name }} /vault/config/{{ item.file }}"'
+  with_items:
+    - { name: "kv-2", file: "kv-2.hcl" }
+    - { name: "write_only", file: "write_only.hcl" }
+    - { name: "read_only", file: "read_only.hcl" }
+    - { name: "delete_only", file: "delete_only.hcl" }
+  tags:
+    - dashboard

@@ -7,7 +7,9 @@ The tasks included in the role are based on the Orchestrator [deployment guide](
 Requirements
 ------------
 
-
+Create a self-service protected resource for CLUES with the following scopes openid, profile, email, address,  phone, offline_access and token exchange enabled.<br>
+Create a self-service protected resource for CLUES with the following scopes openid, profile, offline_access and enable token introspection.<br>
+The Orchestrator uses INDIGO IAM authentication and INDIGO CMDB, CPR, SLAM, the Monitoring and Onezone. <br>
 
 Role Variables
 --------------

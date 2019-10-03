@@ -1,0 +1,4 @@
+# Permanently remove all versions and metadata for a key
+path "secrets/metadata/{% raw -%}{{identity.entity.aliases.{% endraw -%}{{ jwt_accessor }}{% raw -%}.name}}{% endraw -%}/*" {
+    capabilities = ["delete"]
+}
