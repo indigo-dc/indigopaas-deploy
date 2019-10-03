@@ -28,3 +28,5 @@ orchestrator_iam_client_secret: ""
 orchestrator_clues_iam_client_id: ""
 orchestrator_clues_iam_client_secret: ""
 
+disable_monitoring: False
+monitoring_mock_image: "marica/monitoring-mock:latest"

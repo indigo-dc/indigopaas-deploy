@@ -39,7 +39,7 @@ Role Variables
 | orchestrator_iam_client_secret | ""| Client Secret of the IAM client registered for the orchestrator
 | orchestrator_clues_iam_client_id | ""| Client ID of the IAM client registered for CLUES
 | orchestrator_clues_iam_client_secret | ""| Client Secret of the IAM client registered for CLUES
-
+| disable_monitoring | False | disable monitoring installing monitoring-mock docker
 
 Dependencies
 ------------
