@@ -1,0 +1,4 @@
+# Grant permissions on user specific path
+path "secrets/data/{% raw -%}{{identity.entity.aliases.{% endraw -%}{{ jwt_accessor }}{% raw -%}.name}}{% endraw -%}/*" {
+  capabilities = [ "read" ]
+}

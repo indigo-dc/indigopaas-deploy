@@ -1,0 +1,12 @@
+---
+# tasks file for orchestrator-dashboard
+
+- include: certs.yml
+
+- include: database.yml 
+  when: dashboard_enable_db|bool
+
+- include: vault.yml
+  when: dashboard_enable_vault|bool
+
+- include: dashboard.yml 

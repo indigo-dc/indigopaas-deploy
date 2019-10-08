@@ -1,0 +1,28 @@
+{
+    "IAM_CLIENT_ID": "{{ dashboard_iam_client_id }}",
+    "IAM_CLIENT_SECRET": "{{ dashboard_iam_client_secret }}",
+    "IAM_BASE_URL": "{{ dashboard_iam_issuer }}",
+    "ORCHESTRATOR_URL": "{{ dashboard_orchestrator_url }}",
+    "TOSCA_TEMPLATES_DIR": "/opt/tosca-templates",
+    "TOSCA_PARAMETERS_DIR": "/opt/tosca-parameters",
+    "TOSCA_METADATA_DIR": "/opt/tosca-metadata",
+    "SLAM_URL": "{{ dashboard_slam_url }}",
+    "CMDB_URL": "{{ dashboard_cmdb_url }}",
+    {% if dashboard_enable_db %}
+    "CALLBACK_URL": "https://{{ dashboard_fqdn }}/callback",
+    "DB_HOST": "{{ dashboard_db_host }}",
+    "DB_USER": "{{ dashboard_db_user }}",
+    "DB_PASSWORD": "{{ dashboard_db_password }}",
+    "DB_NAME": "{{ dashboard_db_name }}",
+    "DB_PORT": "{{ dashboard_db_port }}",
+    {% endif %}
+    {% if dashboard_notification_enable %}
+    "MAIL_SERVER": "{{ dashboard_mail_server }}",
+    "MAIL_PORT": "{{ dashboard_mail_port }}",
+    "MAIL_SENDER": "{{ dashboard_mail_sender }}",
+    {% endif %}
+    {% if dashboard_enable_vault %}
+    "VAULT_URL": "{{ dashboard_vault_url}}",
+    {% endif %}
+    "ADMINS": "{{ dashboard_administrators }}"
+}

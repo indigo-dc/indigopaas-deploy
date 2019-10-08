@@ -1,0 +1,19 @@
+---
+# defaults file for indigopaas
+
+vault_fqdn: vault.cloud.ba.infn.it
+vault_port: 8200
+vault_url: "https://{{ vault_fqdn }}:{{ vault_port }}"
+vault_conf_dir: /etc/vault
+vault_image_name: "vault:1.1.2"
+
+# vault data dir
+# only for file storage backend
+vault_data_dir: "/data/file"
+
+vault_iam_issuer: https://iam.hostname
+vault_iam_client_id:
+vault_iam_client_secret:
+
+vault_letsencrypt_email: admin@emaill.com
+vault_letsencrypt_certs_dir: /etc/letsencrypt
