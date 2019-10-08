@@ -1,0 +1,56 @@
+---
+- name: "Check input variables"
+  fail:
+    msg: "Change the password: you are using \"changeit\" as value for one or more variables - dashboard_mysql_root_password and dashboard_db_password"
+  when: item == "changeit"
+  with_items:
+    - "{{ dashboard_mysql_root_password }}"
+    - "{{ dashboard_db_password }}"
+  tags:
+    - dashboard
+
+- name: "create directory path to store the configuration files"
+  file:
+    path: "{{ dashboard_conf_dir }}/utils"
+    state: directory
+  tags:
+    - dashboard
+
+- name: "Create mysql container env file"
+  template:
+    src: mysqlenv.j2
+    dest: "{{ dashboard_conf_dir }}/.mysqlenv"
+  tags:
+    - dashboard
+
+- name: "download sql file from github"
+  get_url:
+    url: '{{ dashboard_db_sql_file_url }}'
+    dest: '{{ dashboard_conf_dir }}/utils'
+  tags:
+    - dashboard
+
+- name: start database container container
+  docker_container:
+    name: orchestrator-dashboard-db
+    image: "{{ dashboard_mysql_image }}"
+    detach: true
+    state: started
+    network_mode: host
+    volumes:
+      - "{{ dashboard_db_data_dir }}:/var/lib/mysql"
+      - "{{ dashboard_conf_dir }}/utils/:/docker-entrypoint-initdb.d"
+    restart_policy: always
+    env_file: "{{ dashboard_conf_dir }}/.mysqlenv"
+  tags:
+    - dashboard
+
+- name: wait for mysql to be up and running
+  wait_for:
+     host: "localhost"
+     port: "3306"
+     delay: 20
+     timeout: 600
+     connect_timeout: 10
+  tags:
+    - dashboard

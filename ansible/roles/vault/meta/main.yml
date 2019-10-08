@@ -1,0 +1,14 @@
+galaxy_info:
+  author: marica.antonacci@ba.infn.it, ma.tangaro@ibiom.cnr.it
+  description: Deploy Hashicorp Vault
+  company: INDIGO-DataCloud
+  license: Apache
+  min_ansible_version: 2.4
+  platforms:
+    - name: Ubuntu
+      versions:
+        - xenial
+  galaxy_tags:
+   - indigo-paas
+dependencies:
+   - { role: common }

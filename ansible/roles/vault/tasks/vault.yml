@@ -1,0 +1,34 @@
+---
+- name: "create directory path to store the configuration files"
+  file:
+    path: "{{ vault_conf_dir }}"
+    state: directory
+  tags:
+    - vault
+
+- name: "create vault configuration file"
+  template:
+    src: config.hcl.j2
+    dest: "{{ vault_conf_dir }}/config.hcl"
+  tags:
+    - vault
+
+- name: start vault container
+  docker_container:
+    name: vault
+    image: "{{ vault_image_name }}"
+    command: "vault server -config=/vault/config/config.hcl"
+    detach: true
+    state: started
+    network_mode: host
+    detach: yes
+    privileged: yes
+    env:
+      VAULT_ADDR: "https://{{ vault_fqdn }}:{{ vault_port }}"
+    volumes:
+      - "{{ vault_conf_dir }}:/vault/config/"
+      - "{{ vault_letsencrypt_certs_dir }}:/certs/:ro"
+      - "{{ vault_data_dir }}:/vault/file/"
+    restart_policy: always
+  tags:
+    - vault

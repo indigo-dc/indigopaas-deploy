@@ -1,0 +1,71 @@
+---
+# defaults file for indigopaas
+
+dashboard_fqdn: dashboard.cloud.ba.infn.it
+dashboard_conf_dir: /etc/orchestrator-dashboard
+dashboard_image_name: "indigodatacloud/orchestrator-dashboard"
+
+dashboard_iam_issuer: https://iam.hostname
+dashboard_iam_client_id:
+dashboard_iam_client_secret:
+dashboard_orchestrator_url: "https://indigopaas.cloud.it/orchestrator"
+dashboard_im_url: "https://indigopaas.cloud.it/im"
+dashboard_slam_url: "https://slam.cloud.it:8443"
+dashboard_cmdb_url: "https://indigopaas.cloud.it/cmdb"
+
+# Tosca templates, parameters and metadata location path.
+dashboard_tosca_templates_dir: /opt/tosca-templates
+dashboard_tosca_parameters_dir: /opt/tosca-parameters
+dashboard_tosca_metadata_dir: /opt/tosca-metadata
+
+dashboard_notification_enable: false
+dashboard_mail_server: ''
+dashboard_mail_port: ''
+dashboard_mail_sender: ''
+
+dashboard_administrators: '[]'
+
+dashboard_gunicorn_workers: "4"
+
+dashboard_tosca_template_repository_url: https://github.com/indigo-dc/tosca-templates.git
+dashboard_tosca_template_repository_dir: /opt/tosca-templates
+
+dashboard_enable_db: False
+dashboard_mysql_image: mysql:5.7
+dashboard_db_data_dir: /data/mysql
+dashboard_db_sql_file_url: 'https://raw.githubusercontent.com/maricaantonacci/orchestrator-dashboard/add_db/utils/orchestrator_dashboard.sql'
+
+dashboard_mysql_root_password: changeit
+dashboard_db_name: orchestrator_dashboard
+dashboard_db_user: orchestrator
+dashboard_db_password: changeit
+dashboard_db_host: "{{ dashboard_fqdn }}"
+dashboard_db_port: 3306
+
+dashboard_letsencrypt_email: admin@emaill.com
+dashboard_ssl_cert_path: "/etc/letsencrypt/live/{{ dashboard_fqdn }}/cert.pem"
+dashboard_ssl_key_path: "/etc/letsencrypt/live/{{ dashboard_fqdn }}/privkey.pem"
+
+dashboard_enable_vault: False
+dashboard_vault_token: ""
+dashboard_vault_image: vault:1.1.2 # only for vault configuration. Same image in vault role.
+dashboard_vault_config_dir: "/etc/vault"
+dashboard_vault_url: "https://{{ dashboard_fqdn }}:8200"
+dashboard_vault_iam_client_id: ""
+dashboard_vault_iam_client_secret: ""
+dashboard_vault_default_role: "laniakea"
+dashboard_bound_audience: "orchestrator-dashboard"
+# vault configuration
+dashboard_vault_secrets_path: "secrets"
+#dashboard_vault_secrets_path_name: "secrets"
+#dashboard_vault_secrets_path: "{{ dashboard_vault_secrets_path_name }}/"
+dashboard_wrapping_token_time_duration: "1h"
+dashboard_read_policy: "read_only"
+dashboard_read_token_time_duration: "12h"
+dashboard_read_token_renewal_time_duration: "12h"
+dashboard_write_policy: "write_only"
+dashboard_write_token_time_duration: "12h"
+dashboard_write_token_renewal_time_duration: "12h"
+dashboard_delete_policy: "delete_only"
+dashboard_delete_token_time_duration: "12h"
+dashboard_delete_token_renewal_time_duration: "12h"

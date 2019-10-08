@@ -1,0 +1,23 @@
+---
+- name: Install letsencrypt
+  apt: name=letsencrypt state=present update_cache=true
+  tags:
+    - certs
+
+- name: Create letsencrypt certificate
+  shell: letsencrypt certonly -n --standalone -m {{ vault_letsencrypt_email }} --agree-tos -d {{ vault_fqdn }}
+  args:
+    creates: /etc/letsencrypt/live/{{ vault_fqdn }}
+  tags:
+    - certs
+
+- name: Give right permissions to certs dir
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0711
+  with_items:
+    - "{{ vault_letsencrypt_certs_dir }}/archive"
+    - "{{ vault_letsencrypt_certs_dir }}/live"
+  tags:
+    - certs

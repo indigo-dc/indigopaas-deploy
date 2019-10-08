@@ -1,0 +1,14 @@
+ui = true
+
+listener "tcp" {
+  address = "{{ vault_fqdn }}:{{ vault_port }}"
+  tls_cert_file = "/certs/live/{{ vault_fqdn }}/fullchain.pem"
+  tls_key_file = "/certs/live/{{ vault_fqdn }}/privkey.pem"
+}
+
+storage "file" {
+  path = "/vault/file"
+}
+
+log_level = "trace"
+disable_mlock = true

@@ -1,0 +1,5 @@
+---
+# tasks file for vault
+
+- include: certs.yml
+- include: vault.yml

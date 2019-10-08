@@ -1,0 +1,14 @@
+# Manage tokens
+path "auth/token/*" {
+  capabilities = [ "create", "read", "update", "delete", "sudo" ]
+}
+
+# Grant permissions on user specific path
+path "secrets/data/{% raw -%}{{identity.entity.aliases.{% endraw -%}{{ jwt_accessor }}{% raw -%}.name}}{% endraw -%}/*" {
+    capabilities = [ "read" ]
+}
+
+# For Web UI usage
+path "secrets/metadata" {
+  capabilities = ["list"]
+}
