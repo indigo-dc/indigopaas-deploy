@@ -58,6 +58,15 @@ The roles, in this first version, have been written for Ubuntu 16.04.
 
 - Edit the variables in inventory/group_vars
 
+## Troubleshooting
+
+If running a playbook you get the following error:
+
+```
+fatal: [172.30.24.4]: FAILED! => {"msg": "Timeout (12s) waiting for privilege escalation prompt: "}
+```
+
+increase the timeout value in the file ansible.cfg and then re-run the playbook
 
 
 
