@@ -35,6 +35,7 @@ Role Variables
 | dashboard_tosca_metadata_dir | /tosca-metadata | tosca metadata dir
 | dashboard_slam_url | http://slam.hostname | SLAM base url
 | dashboard_cmdb_url | http://cmdb.hostname | CMDB base url
+| dashboard_im_url | http://im.hostname | IM base url
 | dashboard_administrators || Dashboard administrators list
 | dashboard_letsencrypt_email || let's encrypt email
 | dashboard_enable_db | false | Enable mysql database
