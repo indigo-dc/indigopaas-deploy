@@ -21,10 +21,16 @@
   tags:
     - dashboard
 
+- name: 'Check if {{ dashboard_tosca_template_repository_dir }} exists'
+  stat:
+    path: '{{ dashboard_tosca_template_repository_dir }}'
+  register: template_directory
+
 - name: git clone TOSCA configuration file
   git:
     repo: "{{ dashboard_tosca_template_repository_url }}"
     dest: "{{ dashboard_tosca_template_repository_dir }}"
+  when: not template_directory.stat.exists
   tags:
     - dashboard
 

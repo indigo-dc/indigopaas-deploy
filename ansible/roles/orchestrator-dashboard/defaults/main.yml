@@ -12,6 +12,7 @@ dashboard_orchestrator_url: "https://indigopaas.cloud.it/orchestrator"
 dashboard_im_url: "https://indigopaas.cloud.it/im"
 dashboard_slam_url: "https://slam.cloud.it:8443"
 dashboard_cmdb_url: "https://indigopaas.cloud.it/cmdb"
+dashboard_im_url: "https://indigopaas.cloud.it/im"
 
 # Tosca templates, parameters and metadata location path.
 dashboard_tosca_templates_dir: /opt/tosca-templates
