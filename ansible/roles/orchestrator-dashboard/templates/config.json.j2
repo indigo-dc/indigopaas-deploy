@@ -25,5 +25,8 @@
 {% if dashboard_enable_vault %}
     "VAULT_URL": "{{ dashboard_vault_url}}",
 {% endif %}
-    "ADMINS": "{{ dashboard_administrators }}"
+    "ADMINS": "{{ dashboard_administrators }}",
+    "SUPPORT_EMAIL": "{{ dashboard_support_email }}",
+    "ENABLE_ADVANCED_MENU": "no",
+    "LOG_LEVEL": "info"
 }
