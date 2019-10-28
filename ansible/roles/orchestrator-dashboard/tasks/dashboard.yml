@@ -42,7 +42,7 @@
     state: started
     ports:
       - "443:5001"
-    detach: yes
+    pull: yes
     env:
       ENABLE_HTTPS: "True"
       WORKERS: "{{ dashboard_gunicorn_workers }}"
