@@ -58,6 +58,9 @@
     detach: true
     state: started
     network_mode: "host"
+    pull: yes
+    env:
+        ANSIBLE_VERSION: '{{ im_ansible_version }}'
     volumes:
     - "{{im_log_dir}}:/var/log/im"
     - "{{im_conf_dir}}/im.cfg:/etc/im/im.cfg"
