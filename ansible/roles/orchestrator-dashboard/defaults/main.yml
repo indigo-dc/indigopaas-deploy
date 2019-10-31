@@ -25,6 +25,7 @@ dashboard_mail_port: ''
 dashboard_mail_sender: ''
 
 dashboard_administrators: '[]'
+dashboard_support_email: 'admin@emaill.com'
 
 dashboard_gunicorn_workers: "4"
 
