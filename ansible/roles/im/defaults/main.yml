@@ -12,7 +12,7 @@ im_mysql_password: changeit
 im_mysql_host: 127.0.0.1
 
 im_image: "indigodatacloud/im:{{im_image_version}}"
-im_image_version: 1.8.6
+im_image_version: v1.8.6
 im_repo_tag: "{{im_image_version}}"
 im_conf_file: /etc/im/im.cfg
 im_cfg_max_ctx_time: 28800
