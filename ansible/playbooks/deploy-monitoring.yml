@@ -1,6 +1,5 @@
 ---
-- name: Deploy Monitoring service
-  hosts: monitoring
+- hosts: monitoring
   become: yes
   gather_facts: false
   pre_tasks:
@@ -9,5 +8,13 @@
       changed_when: false
     - name: Gathering Facts
       setup:
+
+- hosts: monitoring_server
+  become: yes
   roles:
-    - monitoring
+    - { role: monitoring, monitoring_node_type: "server" }
+
+- hosts: monitoring_agent
+  become: yes
+  roles:
+   - { role: monitoring, monitoring_node_type: "agent" }

@@ -1,0 +1,16 @@
+---
+#slam_mysql_root_password: 
+#slam_mysql_password: 
+#
+#slam_provider_email: 
+#slam_iam_url: 
+#slam_iam_client_id: 
+#slam_iam_client_secret: 
+#slam_cmdb_url: 
+#slam_onedata_url: 
+#
+#slam_create_keystore: 
+#slam_letsencrypt_email: 
+#slam_dns_name: 
+#slam_keystore_password: 
+#slam_keystore_alias: 

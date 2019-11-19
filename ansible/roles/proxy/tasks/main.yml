@@ -9,19 +9,36 @@
     msg: "Empty value not allowed for variable domain_name"
   when: domain_name|trim == ''
 
-- name: Install letsencrypt
-  apt: name=letsencrypt state=present update_cache=true
+- name: "Install docker-compose"
+  pip: name="docker-compose" state="present"
 
-- name: Create letsencrypt certificate
-  shell: letsencrypt certonly -n --standalone -m {{ letsencrypt_email }} --agree-tos -d {{ domain_name }}
-  args:
-    creates: /etc/letsencrypt/live/{{ domain_name }}
+- name: "create directory path to store the configuration files" 
+  file:
+    path: "{{ proxy_conf_dir }}"
+    state: directory
+    mode: 0755
 
-- name: Install nginx
-  apt: name=nginx state=latest
+- name: "Create the docker-compose file"
+  template:
+    src="docker-compose.yml.j2" dest="{{ proxy_conf_dir }}/docker-compose.yml"
+
+- name: "Start the service"
+  docker_service:
+    project_src: "{{ proxy_conf_dir }}"
+    state: present
+
+- name: "Wait for the generation of the certificates"
+  wait_for: 
+    path: "{{ proxy_conf_dir }}/config/etc/letsencrypt/live/{{ domain_name }}/fullchain.pem"
+    sleep: 5
+
+- name: sleep for further 10 seconds and continue with play
+  wait_for:
+    timeout: 10
+  delegate_to: localhost
 
 - name: Create nginx conf
-  template: src=nginx-default.j2 dest=/etc/nginx/sites-available/default
+  template: src=nginx-default.j2 dest="{{ proxy_conf_dir }}/config/nginx/site-confs/default"
   notify: 
-    - restart nginx
+    - restart proxy
 

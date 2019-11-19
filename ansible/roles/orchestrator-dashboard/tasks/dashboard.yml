@@ -29,11 +29,36 @@
 - name: git clone TOSCA configuration file
   git:
     repo: "{{ dashboard_tosca_template_repository_url }}"
+    version: "{{ dashboard_tosca_template_version }} "
     dest: "{{ dashboard_tosca_template_repository_dir }}"
   when: not template_directory.stat.exists
   tags:
     - dashboard
 
+- set_fact:
+    volumes_to_mount:
+      - "{{ dashboard_conf_dir }}/config.json:/app/app/config.json"
+      - "{{ dashboard_tosca_templates_dir }}:/opt/tosca-templates"
+      - "{{ dashboard_tosca_parameters_dir }}:/opt/tosca-parameters"
+      - "{{ dashboard_tosca_metadata_dir }}:/opt/tosca-metadata"
+
+- block:
+    - set_fact:
+        certs_volumes_to_mount:
+          - "{{ dashboard_ssl_cert_path }}:/certs/cert.pem"
+          - "{{ dashboard_ssl_key_path }}:/certs/key.pem"
+    - set_fact:
+        volumes_to_mount: "{{ volumes_to_mount + certs_volumes_to_mount  }}"
+  when: dashboard_enable_https|bool
+
+- block:
+    - set_fact:
+        vault_volume_to_mount:
+          - "{{ dashboard_conf_dir }}/vault-config.json:/app/app/vault-config.json"
+    - set_fact:
+        volumes_to_mount: "{{ volumes_to_mount + vault_volume_to_mount  }}"
+  when: dashboard_enable_vault|bool
+    
 - name: start dashboard container
   docker_container:
     name: orchestrator-dashboard
@@ -41,19 +66,12 @@
     detach: true
     state: started
     ports:
-      - "443:5001"
+      - "{{dashboard_port}}:5001"
     pull: yes
     env:
-      ENABLE_HTTPS: "True"
+      ENABLE_HTTPS: '"{{ dashboard_enable_https }}"'
       WORKERS: "{{ dashboard_gunicorn_workers }}"
-    volumes:
-      - "{{ dashboard_ssl_cert_path }}:/certs/cert.pem"
-      - "{{ dashboard_ssl_key_path }}:/certs/key.pem"
-      - "{{ dashboard_conf_dir }}/config.json:/app/app/config.json"
-      - "{{ dashboard_conf_dir }}/vault-config.json:/app/app/vault-config.json"
-      - "{{ dashboard_tosca_templates_dir }}:/opt/tosca-templates"
-      - "{{ dashboard_tosca_parameters_dir }}:/opt/tosca-parameters"
-      - "{{ dashboard_tosca_metadata_dir }}:/opt/tosca-metadata"
+    volumes: "{{volumes_to_mount}}"
     restart_policy: always
   tags:
     - dashboard

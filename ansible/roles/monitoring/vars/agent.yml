@@ -1,0 +1,2 @@
+---
+monitoring_conf_dir: "{{ monitoring_conf_base_dir }}/agent"

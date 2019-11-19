@@ -33,7 +33,7 @@ Role Variables
 | monitoring_zabbix_wrapper_image | indigodatacloud/zabbix-wrapper:indigo_2 | Docker image for Zabbix Wrapper
 | monitoring_zabbix_url | "http |//{{monitoring_server_host}}/api_jsonrpc.php"| 
 | monitoring_agent_host | "{{ansible_default_ipv4.address}}"| Address of the Zabbix agent
-| monitoring_server_host | "{{ groups['monitoring-server'][0] }}"| Address of the Zabbix server
+| monitoring_server_host | "{{ groups['monitoring_server'][0] }}"| Address of the Zabbix server
 | monitoring_cmdb_location | "https |//{{ groups['proxy'][0] }}/cmdb" | CMDB endpoint
 | monitoring_iam_token_url | https://endpoint/token | IAM token endpoint
 | monitoring_iam_username || IAM username

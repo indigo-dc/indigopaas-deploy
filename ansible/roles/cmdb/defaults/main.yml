@@ -4,6 +4,7 @@ cmdb_conf_dir: /etc/cmdb
 cmdb_image: indigodatacloud/cmdb:indigo_2
 cmdb_data_dir: /data/cmdb
 
+cmdb_repo_version: v0.5 
 cmdb_target_url: http://localhost:5984/indigo-cmdb-v2/_design/schema/_rewrite
 cmdb_crud_target_url: http://localhost:5984/indigo-cmdb-v2
 cmdb_crud_username: cmdb

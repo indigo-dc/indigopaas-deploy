@@ -2,17 +2,17 @@
 # defaults file for indigopaas
 
 dashboard_fqdn: dashboard.cloud.ba.infn.it
+dashboard_port: 5001
 dashboard_conf_dir: /etc/orchestrator-dashboard
-dashboard_image_name: "indigodatacloud/orchestrator-dashboard"
+dashboard_image_name: "indigodatacloud/orchestrator-dashboard:v1.0.0"
 
 dashboard_iam_issuer: https://iam.hostname
 dashboard_iam_client_id:
 dashboard_iam_client_secret:
 dashboard_orchestrator_url: "https://indigopaas.cloud.it/orchestrator"
-dashboard_im_url: "https://indigopaas.cloud.it/im"
-dashboard_slam_url: "https://slam.cloud.it:8443"
-dashboard_cmdb_url: "https://indigopaas.cloud.it/cmdb"
-dashboard_im_url: "https://indigopaas.cloud.it/im"
+#dashboard_im_url: "https://indigopaas.cloud.it/im"
+#dashboard_slam_url: "https://slam.cloud.it:8443"
+#dashboard_cmdb_url: "https://indigopaas.cloud.it/cmdb"
 
 # Tosca templates, parameters and metadata location path.
 dashboard_tosca_templates_dir: /opt/tosca-templates
@@ -26,10 +26,13 @@ dashboard_mail_sender: ''
 
 dashboard_administrators: '[]'
 dashboard_support_email: 'admin@emaill.com'
+dashboard_enable_advanced_menu: 'no'
+dashboard_log_level: 'info'
 
 dashboard_gunicorn_workers: "4"
 
 dashboard_tosca_template_repository_url: https://github.com/indigo-dc/tosca-templates.git
+dashboard_tosca_template_version: v4.0.0
 dashboard_tosca_template_repository_dir: /opt/tosca-templates
 
 dashboard_enable_db: False
@@ -44,6 +47,7 @@ dashboard_db_password: changeit
 dashboard_db_host: "{{ dashboard_fqdn }}"
 dashboard_db_port: 3306
 
+dashboard_enable_https: False 
 dashboard_letsencrypt_email: admin@emaill.com
 dashboard_ssl_cert_path: "/etc/letsencrypt/live/{{ dashboard_fqdn }}/cert.pem"
 dashboard_ssl_key_path: "/etc/letsencrypt/live/{{ dashboard_fqdn }}/privkey.pem"
@@ -57,6 +61,7 @@ dashboard_vault_iam_client_id: ""
 dashboard_vault_iam_client_secret: ""
 dashboard_vault_default_role: "laniakea"
 dashboard_bound_audience: "orchestrator-dashboard"
+
 # vault configuration
 dashboard_vault_secrets_path: "secrets"
 #dashboard_vault_secrets_path_name: "secrets"

@@ -1,6 +1,6 @@
 ---
 # handlers file for indigopaas
-- name: restart nginx
-  service:
-    name: nginx
-    state: restarted
+- name: restart proxy
+  docker_service:
+    project_src: "{{ proxy_conf_dir }}"
+    restarted: yes

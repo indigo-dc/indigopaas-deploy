@@ -2,9 +2,11 @@
 
 The roles, in this first version, have been written for Ubuntu 16.04.
 
+![](https://img.shields.io/badge/tested%20with-ansible%202.8.6-green.svg)
+
 # Deployment scenario:
 
-
+![](doc/images/paas_deployment_schema.png)
 
 # Configure the control machine
 
@@ -41,18 +43,18 @@ The roles, in this first version, have been written for Ubuntu 16.04.
   [im]
   172.30.24.5
 
-  [monitoring-server]
+  [monitoring_server]
   172.30.24.6
 
-  [monitoring-agent]
+  [monitoring_agent]
   172.30.24.7
 
   [orchestrator]
   172.30.24.8
 
   [monitoring:children]
-  monitoring-server
-  monitoring-agent
+  monitoring_server
+  monitoring_agent
 
   ````
 

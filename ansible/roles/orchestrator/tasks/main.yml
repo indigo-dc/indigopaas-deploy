@@ -1,20 +1,5 @@
 ---
-- name: "Install monitoring mock"
-  docker_container:
-    name: monitoring-mock
-    image: "{{ monitoring_mock_image }}"
-    detach: true
-    state: started
-    network_mode: "host"
-    restart_policy: always
-  when: disable_monitoring|bool
-
-- name: "Set monitoring url to localhost if disabled"
-  set_fact:
-    orchestrator_monitoring_url: "http://localhost:8082"
-  when: disable_monitoring|bool
-
-# tasks file for indigopaas.slam
+# tasks file for indigopaas.orchestrator
 - name: "Check input variables"
   fail:
     msg: "Change the password: you are using <<changeit>> as value for one or more variables (orchestrator_mysql_root_password, orchestrator_mysql_password) " 
@@ -31,7 +16,7 @@
     mode: 0755
   with_items:
     - "{{ orchestrator_conf_dir }}"
-    - "{{orchestrator_conf_dir}}/trusted_certs"
+    - "{{ orchestrator_conf_dir}}/trusted_certs"
     - "{{ orchestrator_mysql_data_dir }}"
 
 
@@ -118,6 +103,7 @@
   docker_container:
     name: orchestrator
     image: "{{ orchestrator_image }}"
+    pull: true
     detach: true
     state: started
     network_mode: "host"

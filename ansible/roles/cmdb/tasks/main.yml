@@ -38,30 +38,36 @@
 
 - name: "Perform initialization steps"
   block:
-    #- name: "Download cmdb source code"
-    - unarchive: 
-        src: https://github.com/indigo-dc/cmdb/archive/v0.4.tar.gz
-        dest: "{{ cmdb_conf_dir }}"
+    - name: "Create source code directory"
+      file:
+        path: "{{ cmdb_conf_dir }}/cmdb-{{ cmdb_repo_version }}"
+        state: directory
+        mode: 0755
+    - name: "Download cmdb source code"
+      unarchive: 
+        src: "https://github.com/indigo-dc/cmdb/archive/{{ cmdb_repo_version }}.tar.gz"
+        dest: "{{ cmdb_conf_dir }}/cmdb-{{ cmdb_repo_version }}"
         remote_src: yes
-        creates: "{{ cmdb_conf_dir }}/cmdb-0.4/pom.xml"
+        extra_opts: [--strip-components=1]
+        creates: "{{ cmdb_conf_dir }}/cmdb-{{ cmdb_repo_version }}/pom.xml"
     
-    #- name: "Fix config.js"
-    - replace: 
-        path: "{{ cmdb_conf_dir }}/cmdb-0.4/indigo-schema-couch/config.js"
+    - name: "Fix config.js"
+      replace: 
+        path: "{{ cmdb_conf_dir }}/cmdb-{{ cmdb_repo_version }}/indigo-schema-couch/config.js"
         regexp: "username:password@host"
         replace: "{{cmdb_crud_username}}:{{cmdb_crud_password}}@{{ansible_default_ipv4.address}}"
     
-    #- name: "Fix config.js"
-    - replace: 
-        path: "{{ cmdb_conf_dir }}/cmdb-0.4/indigo-schema-couch/config.js"
+    - name: "Fix config.js"
+      replace: 
+        path: "{{ cmdb_conf_dir }}/cmdb-{{ cmdb_repo_version }}/indigo-schema-couch/config.js"
         regexp: "dbname"
         replace: "indigo-cmdb-v2"
     
-    #- name: "Compile cmdb"
-    - shell: docker run --rm -v $(pwd)/cmdb-0.4:/cmdb -w /cmdb/indigo-schema-couch node /bin/bash -c 'npm install && nodejs index.js'
+    - name: "Compile"
+      shell: "docker run --rm -v $(pwd)/cmdb-{{ cmdb_repo_version }}:/cmdb -w /cmdb/indigo-schema-couch node /bin/bash -c 'npm install && nodejs index.js'"
       args:
          chdir: "{{cmdb_conf_dir}}"
-         creates: "{{cmdb_conf_dir}}/cmdb-0.4/indigo-schema-couch/package-lock.json"
+         creates: "{{cmdb_conf_dir}}/cmdb-{{ cmdb_repo_version }}/indigo-schema-couch/package-lock.json"
   tags:
     - cmdb
 
