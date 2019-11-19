@@ -6,7 +6,7 @@ The roles, in this first version, have been written for Ubuntu 16.04.
 
 # Deployment scenario:
 
-
+![](doc/images/paas_deployment_schema.png)
 
 # Configure the control machine
 
