@@ -2,8 +2,12 @@
 - name: Install OpenJDK 8 (Ubuntu)
   apt: name=openjdk-8-jre-headless state=present update_cache=yes
 
-- name: Install Openstack probe (Ubuntu)
-  apt: deb="{{monitoring_openstack_probe_deb}}" state=present
+- name: Install Openstack/Mesos/QCG probes (Ubuntu)
+  apt: deb="{{item}}" state=present
+  with_items: 
+   - "{{monitoring_openstack_probe_deb}}"
+   - "{{monitoring_mesos_probe_deb}}"
+   - "{{monitoring_qcg_probe_deb}}"
 
 - name: "create directory path to store the configuration files"
   file:
@@ -11,7 +15,7 @@
     state: directory
     mode: 0755
 
-- name: Configuration creation
+- name: "[Openstack probe] configuration setup - step 1"
   template: src=openstackprobe.properties.j2 dest="{{ monitoring_zabbix_conf_dir }}/openstackprobe.properties"
 
 - name: Get list of provider from cmdb
@@ -20,15 +24,53 @@
     return_content: yes
   register: cloud_providers  
 
-- name: Configuration creation
+- name: "[Openstack probe] configuration setup - step 2"
   template: src=oszones.yml.j2 dest="{{ monitoring_zabbix_conf_dir }}/oszones.yml"
 
-- name: Configure cron job
+- name: "[Openstack probe] Configure cron job"
   cron:
     name: "openstack probe"
     minute: "*/10"
-    job: "java -jar /usr/share/java/zabbix//openstack-zabbix-probe-1.2-jar-with-dependencies.jar >> /var/log/openstackprobe.log 2>&1"
+    job: "java -jar /usr/share/java/zabbix/openstack-zabbix-probe-{{monitoring_openstack_probe_jar_version}}-jar-with-dependencies.jar >> /var/log/openstackprobe.log 2>&1"
     cron_file: openstackprobe
+    user: root
+
+- name: "[Mesos probe] configuration setup"
+  template: src=mesosprobe.properties.j2 dest="{{ monitoring_zabbix_conf_dir }}/mesosprobe.properties"
+
+- name: "[Mesos probe] Configure cron job"
+  cron:
+    name: "mesos probe"
+    minute: "*/10"
+    job: "mesosprobe.sh mesos"
+    cron_file: mesosprobe
+    user: root
+
+- name: "[Marathon probe] Configure cron job"
+  cron:
+    name: "marathon probe"
+    minute: "*/10"
+    job: "mesosprobe.sh marathon"
+    cron_file: marathonprobe
+    user: root
+
+- name: "[Chronos probe] Configure cron job"
+  cron:
+    name: "chronos probe"
+    minute: "*/10"
+    job: "mesosprobe.sh chronos"
+    cron_file: chronosprobe
+    user: root
+
+- name: "[QCG probe] configuration setup"
+  template: src=qcgprobe.properties.j2 dest="{{ monitoring_zabbix_conf_dir }}/qcgprobe.properties"
+
+- name: "[QCG probe] Configure cron job"
+  cron:
+    name: "qcg probe"
+    minute: "*/10"
+    job: "qcgprobe.sh"
+    cron_file: qcgprobe
     user: root
 
 - name: Get zabbix login token

@@ -41,18 +41,18 @@ The roles, in this first version, have been written for Ubuntu 16.04.
   [im]
   172.30.24.5
 
-  [monitoring-server]
+  [monitoring_server]
   172.30.24.6
 
-  [monitoring-agent]
+  [monitoring_agent]
   172.30.24.7
 
   [orchestrator]
   172.30.24.8
 
   [monitoring:children]
-  monitoring-server
-  monitoring-agent
+  monitoring_server
+  monitoring_agent
 
   ````
 

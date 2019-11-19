@@ -2,9 +2,8 @@
 # defaults file for indigopaas/proxy
 letsencrypt_email: ""
 domain_name: ""
-proxy_certificate_path: /etc/letsencrypt/live/{{ domain_name }}/fullchain.pem
-proxy_certificate_key_path: /etc/letsencrypt/live/{{ domain_name }}/privkey.pem
-proxy_trusted_certificate_path: /etc/letsencrypt/live/{{ domain_name }}/fullchain.pem
+proxy_conf_dir: /etc/proxy
 #
 cpr_port: 8081
-
+proxy_enable_orchestrator_dashboard_endpoint: true
+orchestrator_dashboard_port: 5001

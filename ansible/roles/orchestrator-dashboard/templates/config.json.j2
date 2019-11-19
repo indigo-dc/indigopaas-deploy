@@ -6,9 +6,15 @@
     "TOSCA_TEMPLATES_DIR": "/opt/tosca-templates",
     "TOSCA_PARAMETERS_DIR": "/opt/tosca-parameters",
     "TOSCA_METADATA_DIR": "/opt/tosca-metadata",
+{% if dashboard_slam_url is defined %}
     "SLAM_URL": "{{ dashboard_slam_url }}",
+{% endif %}
+{% if dashboard_cmdb_url is defined %}
     "CMDB_URL": "{{ dashboard_cmdb_url }}",
+{% endif %}
+{% if dashboard_im_url is defined %}
     "IM_URL": "{{ dashboard_im_url }}",
+{% endif %}
 {% if dashboard_enable_db %}
     "CALLBACK_URL": "https://{{ dashboard_fqdn }}/callback",
     "DB_HOST": "{{ dashboard_db_host }}",
@@ -27,6 +33,6 @@
 {% endif %}
     "ADMINS": "{{ dashboard_administrators }}",
     "SUPPORT_EMAIL": "{{ dashboard_support_email }}",
-    "ENABLE_ADVANCED_MENU": "no",
-    "LOG_LEVEL": "info"
+    "ENABLE_ADVANCED_MENU": "{{ dashboard_enable_advanced_menu }}",
+    "LOG_LEVEL": "{{ dashboard_log_level }}"
 }

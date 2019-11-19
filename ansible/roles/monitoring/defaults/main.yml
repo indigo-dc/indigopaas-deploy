@@ -1,12 +1,13 @@
 ---
 # defaults file for indigopaas
 
-monitoring_conf_dir: /etc/monitoring
+monitoring_conf_base_dir: /etc/monitoring
 monitoring_zabbix_conf_dir: /etc/zabbix
 
 monitoring_mysql_user: zabbix
 monitoring_mysql_password: changeit
 monitoring_mysql_root_password: changeit
+monitoring_mysql_data_path: /data/zabbix
 
 
 monitoring_zabbix_wrapper_image: indigodatacloud/zabbix-wrapper:indigo_2 
@@ -15,9 +16,11 @@ monitoring_zabbix_username: Admin
 monitoring_zabbix_password: zabbix
 
 monitoring_agent_host: "{{ansible_default_ipv4.address}}"
-monitoring_server_host: "{{ groups['monitoring-server'][0] }}"
+monitoring_server_host: "{{ groups['monitoring_server'][0] }}"
 
-monitoring_openstack_probe_deb: http://repo.indigo-datacloud.eu/repository/indigo/2/ubuntu/dists/xenial-updates/main/binary-amd64/openstack-zabbix-probe-1.2.deb
+monitoring_openstack_probe_deb: https://github.com/indigo-dc/Monitoring/releases/download/1.4.2-openstack/openstack-zabbix-probe-1.4.2_all.deb
+monitoring_mesos_probe_deb: https://github.com/indigo-dc/Monitoring/releases/download/1.4-mesos-openstack/mesos-zabbix-probe_1.4_all.deb
+monitoring_qcg_probe_deb: https://github.com/indigo-dc/Monitoring/releases/download/1.0-qcg/qcg-zabbix-probe-1.0_all.deb
 monitoring_cmdb_location: "https://{{ groups['proxy'][0] }}/cmdb" 
 monitoring_iam_token_url: https://endpoint/token
 monitoring_iam_username:
@@ -27,4 +30,6 @@ monitoring_iam_secret:
 monitoring_openstack_project:
 monitoring_iam_organization_name: 
 
-zabbix_template_list: [ 'zbx_mesos_template.xml', 'zbx_openstack_template.xml' ]
+
+monitoring_openstack_probe_jar_version: 1.4.2
+zabbix_template_list: [ 'zbx_mesos_template.xml', 'zbx_openstack_template.xml', 'zbx_runtimetest_template.xml', 'zbx_qcg_template.xml' ]

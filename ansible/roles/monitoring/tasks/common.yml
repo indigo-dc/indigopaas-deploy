@@ -1,0 +1,19 @@
+---
+
+- name: "Install docker-compose"
+  pip: name="docker-compose" state="present"
+
+- name: "create directory path to store persistent files"
+  file:
+    path: "{{ monitoring_conf_dir }}"
+    state: directory
+    mode: 0755
+
+- name: "Create the containers env file"
+  template:
+    src="docker-compose-{{monitoring_node_type}}.j2" dest="{{ monitoring_conf_dir }}/docker-compose.yml"
+
+- name: "Start the services"
+  docker_service:
+    project_src: "{{ monitoring_conf_dir }}"
+    state: present

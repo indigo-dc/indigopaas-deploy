@@ -25,7 +25,7 @@ slam_cmdb_url: http://cmdb.hostname
 slam_onedata_url: https://onedata.indigo-datacloud.eu
 
 slam_create_keystore: false
-letsencrypt_email: ""
+slam_letsencrypt_email: ""
 slam_dns_name: ""
 slam_keystore_password: changeit
 slam_keystore_alias: slam

@@ -2,6 +2,7 @@
 # tasks file for orchestrator-dashboard
 
 - include: certs.yml
+  when: dashboard_enable_https|bool
 
 - include: database.yml 
   when: dashboard_enable_db|bool

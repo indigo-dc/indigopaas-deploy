@@ -1,6 +1,6 @@
 ---
 - name: Deploy Orchestrator Dashboard service
-  hosts: orchestrator-dashboard
+  hosts: orchestrator_dashboard
   become: yes
   gather_facts: false
   pre_tasks:
