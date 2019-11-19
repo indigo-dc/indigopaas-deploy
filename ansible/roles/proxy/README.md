@@ -19,9 +19,6 @@ Role Variables
 | -------------- | ------------- |------------- |
 | letsencrypt_email | ""| Provide a valid email address for letsencrypt notifications
 | domain_name | ""| DNS name of the node (needed for generating the certificates)
-| proxy_certificate_path | /etc/letsencrypt/live/{{ domain_name }}/fullchain.pem| path to SSL certificate
-| proxy_certificate_key_path | /etc/letsencrypt/live/{{ domain_name }}/privkey.pem| path to SSL certificate key
-| proxy_trusted_certificate_path | /etc/letsencrypt/live/{{ domain_name }}/fullchain.pem| path to SSL certificate chain. 
 
 
 Dependencies
