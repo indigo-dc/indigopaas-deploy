@@ -2,6 +2,8 @@
 
 The roles, in this first version, have been written for Ubuntu 16.04.
 
+![](https://img.shields.io/badge/tested%20with-ansible%202.8.6-green.svg)
+
 # Deployment scenario:
 
 
