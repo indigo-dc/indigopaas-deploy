@@ -1,0 +1,8 @@
+---
+im_mysql_root_password: 
+im_mysql_password: 
+
+im_cfg_oidc_issuers: 
+im_cfg_oidc_client_id: 
+im_cfg_oidc_client_secret: 
+
