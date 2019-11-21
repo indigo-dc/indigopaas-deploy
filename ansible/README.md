@@ -60,6 +60,20 @@ The roles, in this first version, have been written for Ubuntu 16.04.
 
 - Edit the variables in inventory/group_vars
 
+- Run the playbooks for each service you want to deploy. 
+  The recommended order is the following:
+  ````
+  ansible-playbook -i inventory/inventory playbooks/deploy-proxy.yml
+  ansible-playbook -i inventory/inventory playbooks/deploy-iam.yml
+  ansible-playbook -i inventory/inventory playbooks/deploy-cmdb.yml
+  ansible-playbook -i inventory/inventory playbooks/deploy-slam.yml
+  ansible-playbook -i inventory/inventory playbooks/deploy-cpr.yml
+  ansible-playbook -i inventory/inventory playbooks/deploy-im.yml
+  ansible-playbook -i inventory/inventory playbooks/deploy-monitoring.yml
+  ansible-playbook -i inventory/inventory playbooks/deploy-orchestrator.yml
+  ansible-playbook -i inventory/inventory playbooks/deploy-orchestrator-dashboard.yml
+  ````
+  
 ## Troubleshooting
 
 If running a playbook you get the following error:
