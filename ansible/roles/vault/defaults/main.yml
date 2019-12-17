@@ -2,6 +2,7 @@
 # defaults file for indigopaas
 
 vault_fqdn: vault.cloud.ba.infn.it
+vault_host: '{{ vault_fqdn }}'
 vault_port: 8200
 vault_url: "https://{{ vault_fqdn }}:{{ vault_port }}"
 vault_conf_dir: /etc/vault
