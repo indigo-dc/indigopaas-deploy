@@ -14,6 +14,7 @@ Role Variables
 | Variable name  | Default Value | Description
 | -------------- | ------------- |------------- |
 | vault_fqdn | vault.cloud.ba.infn.it | Host dns name
+| vault_host | vault_fqdn | Host ip address
 | vault_letsencrypt_email || let's encrypt email
 
 Dependencies
