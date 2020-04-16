@@ -16,3 +16,7 @@ WORKFLOW_DB_PWD={{orchestrator_mysql_password}}
 {% if orchestrator_custom_types is defined %}
 TOSCA_DEFINITIONS_INDIGO=file:/tosca/custom_types.yaml
 {% endif %}
+{% if orchestrator_vault_url is defined %}
+VAULT_URL={{orchestrator_vault_url}}
+VAULT_ROLE={{orchestrator_vault_role}}
+{% endif %}

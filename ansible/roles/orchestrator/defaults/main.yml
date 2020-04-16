@@ -12,7 +12,7 @@ orchestrator_mysql_user: orchestrator
 orchestrator_mysql_password: changeit
 orchestrator_mysql_host: 127.0.0.1
 orchestrator_dbport: 3306
-orchestrator_image: indigodatacloud/orchestrator:2.2.0-final
+orchestrator_image: indigodatacloud/orchestrator:2.3.0-final
 
 orchestrator_url: http://localhost:8080
 orchestrator_im_url: "https://servproject.i3m.upv.es:8811"
@@ -28,3 +28,7 @@ orchestrator_iam_client_secret: ""
 orchestrator_clues_iam_client_id: ""
 orchestrator_clues_iam_client_secret: ""
 orchestrator_iam_audience: "changeit"
+orchestrator_iam_admingroup: "orchestrator-admins"
+#orchestrator_vault_url:
+#orchestrator_vault_role:
+

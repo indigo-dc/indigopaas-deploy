@@ -16,4 +16,5 @@
 #orchestrator_iam_client_secret: 
 #orchestrator_clues_iam_client_id: 
 #orchestrator_clues_iam_client_secret: 
-
+#orchestrator_vault_url:
+#orchestrator_vault_role:
