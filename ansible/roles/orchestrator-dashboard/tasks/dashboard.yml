@@ -1,8 +1,11 @@
 ---
 - name: "create directory path to store the configuration files"
   file:
-    path: "{{ dashboard_conf_dir }}"
+    path: "{{ item }}"
     state: directory
+  loop:
+    - "{{ dashboard_conf_dir }}" 
+    - "{{ dashboard_trusted_certs }}"      
   tags:
     - dashboard
 
@@ -10,6 +13,7 @@
   template:
     src: config.json.j2
     dest: "{{ dashboard_conf_dir }}/config.json"
+  notify: restart dashboard  
   tags:
     - dashboard
 
@@ -18,6 +22,7 @@
     src: vault-config.json.j2
     dest: "{{ dashboard_conf_dir }}/vault-config.json"
   when: dashboard_enable_vault|bool
+  notify: restart dashboard
   tags:
     - dashboard
 
@@ -37,10 +42,11 @@
 
 - set_fact:
     volumes_to_mount:
-      - "{{ dashboard_conf_dir }}/config.json:/app/app/config.json"
+      - "{{ dashboard_conf_dir }}/config.json:/app/instance/config.json"
       - "{{ dashboard_tosca_templates_dir }}:/opt/tosca-templates"
       - "{{ dashboard_tosca_parameters_dir }}:/opt/tosca-parameters"
       - "{{ dashboard_tosca_metadata_dir }}:/opt/tosca-metadata"
+      - "{{ dashboard_trusted_certs }}:/trusted_certs"  
 
 - block:
     - set_fact:
@@ -52,19 +58,31 @@
   when: dashboard_enable_https|bool
 
 - block:
+    - copy:
+        src: "{{ dashboard_ldap_ca_cert_local_path }}"
+        dest: "{{ dashboard_trusted_certs }}/{{ dashboard_ldap_ca_cert_local_path | basename }}"     
+  when: dashboard_ldap_ca_cert_local_path is defined
+
+- block:
     - set_fact:
         vault_volume_to_mount:
-          - "{{ dashboard_conf_dir }}/vault-config.json:/app/app/vault-config.json"
+          - "{{ dashboard_conf_dir }}/vault-config.json:/app/instance/vault-config.json"
     - set_fact:
         volumes_to_mount: "{{ volumes_to_mount + vault_volume_to_mount  }}"
   when: dashboard_enable_vault|bool
     
+- name: Create a network
+  docker_network:
+    name: dashboard_default
+
 - name: start dashboard container
   docker_container:
     name: orchestrator-dashboard
     image: "{{ dashboard_image_name }}"
     detach: true
     state: started
+    networks:
+      - name: dashboard_default
     ports:
       - "{{dashboard_port}}:5001"
     pull: yes

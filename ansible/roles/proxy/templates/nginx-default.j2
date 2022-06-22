@@ -2,34 +2,57 @@
 server {
 	listen 80 default_server;
 	listen [::]:80 default_server;
+	server_tokens off;
 	server_name _;
 	return 301 https://$host$request_uri;
 }
 
+{% if "slat" in groups and groups['slat']|length >0 %}
 
-# main server block
 server {
-	listen 443 ssl http2 default_server;
-	listen [::]:443 ssl http2 default_server;
+  listen 8443 ssl http2 default_server;
+  listen [::]:8443 ssl http2 default_server;
+  server_tokens off;
+  server_name _;
 
-#	root /config/www;
-#	index index.html index.htm index.php;
+  # all ssl related config moved to ssl.conf
+  include /config/nginx/ssl.conf;
 
-	server_name _;
-
-	# all ssl related config moved to ssl.conf
-	include /config/nginx/ssl.conf;
-
-{% if "orchestrator_dashboard" in groups and "proxy_enable_orchestrator_dashboard_endpoint" %}
   location / {
     proxy_read_timeout      600;
     proxy_connect_timeout   159s;
     proxy_send_timeout      600;
     # Pass the request to Gunicorn
-    proxy_pass http://{{groups['orchestrator_dashboard'][0]}}:{{orchestrator_dashboard_port}}/;
-    proxy_set_header Host $host;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_pass              http://{{groups['slat'][0]}}:{{ slat_port }}/;
+    proxy_set_header        Host $host:$server_port;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        X-Forwarded-Proto https;
+    proxy_redirect          http:// https://;
+   }
+}
+{% endif %}
+
+# main server block
+server {
+	listen 443 ssl http2 default_server;
+	listen [::]:443 ssl http2 default_server;
+	server_tokens off;
+	server_name _;
+
+	# all ssl related config moved to ssl.conf
+	include /config/nginx/ssl.conf;
+
+{% if "orchestrator_dashboard" in groups and proxy_enable_orchestrator_dashboard_endpoint|bool %}
+  location / {
+    proxy_read_timeout      600;
+    proxy_connect_timeout   159s;
+    proxy_send_timeout      600;
+    # Pass the request to Gunicorn
+    proxy_pass              http://{{groups['orchestrator_dashboard'][0]}}:{{orchestrator_dashboard_port}}/;
+    proxy_set_header        Host $host;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header        X-Forwarded-Proto https;
     proxy_redirect          http:// https://;
    }
@@ -38,7 +61,7 @@ server {
       internal;
   }
 {% endif %}
-{% if "cmdb" in groups %}
+{% if "cmdb" in groups and groups['cmdb']|length > 0 %}
   location /cmdb/ {
     proxy_pass              http://{{groups['cmdb'][0]}}:5984/indigo-cmdb-v2/_design/schema/_rewrite/;
     proxy_set_header        X-Real-IP $remote_addr;
@@ -48,16 +71,24 @@ server {
     proxy_redirect          http:// https://;
   }
   location /cmdb-crud/ {
-    proxy_pass http://{{groups['cmdb'][0]}}:8080/cmdb-crud/;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header X-Forwarded-Proto https;
-    proxy_set_header Host $http_host;
-    proxy_redirect http:// https://;
+    proxy_pass              http://{{groups['cmdb'][0]}}:8080/cmdb-crud/;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        X-Forwarded-Proto https;
+    proxy_set_header        Host $http_host;
+    proxy_redirect          http:// https://;
+ }
+  location /couch/ {
+    proxy_pass              http://{{groups['cmdb'][0]}}:5984/;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        X-Forwarded-Proto https;
+    proxy_set_header        Host $http_host;
+    proxy_redirect          http:// https://;
  }
 {% endif %}
 
-{% if "cpr" in groups %}
+{% if "cpr" in groups and groups['cpr']|length > 0 %}
   location /cpr/ {
     proxy_pass              http://{{groups['cpr'][0]}}:{{cpr_port}}/;
     proxy_set_header        X-Real-IP $remote_addr;
@@ -68,7 +99,7 @@ server {
   }
 
 {% endif %}
-{% if "im" in groups %}
+{% if "im" in groups and groups['im']|length >0 %}
   location /im/ {
     proxy_read_timeout      600;
     proxy_connect_timeout   159s;
@@ -82,7 +113,7 @@ server {
     proxy_set_header        X-Forwarded-Prefix /im;
   }
 {% endif %}
-{% if "orchestrator" in groups %}
+{% if "orchestrator" in groups and groups['orchestrator']|length >0 %}
   location /orchestrator/ {
     proxy_read_timeout      600;
     proxy_connect_timeout   159s;
@@ -96,7 +127,7 @@ server {
     proxy_set_header        X-Forwarded-Prefix /orchestrator;
   }
 {% endif %}
-{% if "monitoring_server" in groups %}
+{% if "monitoring_server" in groups and groups['monitoring_server']|length >0 %}
 location /monitoring/ {
     proxy_read_timeout      600;
     proxy_connect_timeout   159s;

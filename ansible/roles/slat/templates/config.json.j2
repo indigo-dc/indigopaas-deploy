@@ -1,0 +1,14 @@
+{
+  "SQLALCHEMY_DATABASE_URI": "mysql+pymysql://{{ slat_db_user }}:{{ slat_db_password}}@slat-db/{{ slat_db_name }}",
+  "IAM_CLIENT_ID": "{{ slat_iam_client_id }}",
+  "IAM_CLIENT_SECRET": "{{ slat_iam_client_secret }}",
+  "IAM_BASE_URL": "{{ slat_iam_issuer }}",
+  "SLAT_ADMIN_GROUP": "{{ slat_admin_group }}",
+  "TRUSTED_OIDC_IDP_LIST": [
+  {% for idp in slat_trusted_oidc_idp_list %}
+    { "iss": "{{ idp.iss }}", "type": "{{ idp.type }}" }
+  {% if not loop.last %},{% endif %}{% endfor %}
+  ],
+  "CMDB_URL": "{{ slat_cmdb_url }}",
+  "LOG_LEVEL": "{{ slat_log_level }}"
+}

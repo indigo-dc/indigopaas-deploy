@@ -1,0 +1,56 @@
+---
+# tasks file for vault
+
+- name: "Install docker-compose"
+  pip: name="docker-compose" state="present"
+
+- name: "Create directory paths to store the configuration files and persistent data"
+  file:
+    path: "{{ item.path }}"
+    state: directory
+    mode: "{{ item.mode }}"
+    recurse: yes
+  loop:          
+    - { "path": "{{ consul_conf_dir }}", "mode": '0777' }      
+    - { "path": "{{ consul_data_dir }}", "mode": '0777' }  
+
+
+- name: "Create the docker-compose file"
+  template:
+    src="docker-compose.j2" dest="{{ consul_conf_dir }}/docker-compose.yml"    
+
+    #- name: Read bootstrapped state
+    #  stat:
+    #    path: "{{ consul_bootstrap_state }}"
+    #  register: bootstrap_state
+    #  ignore_errors: true
+
+
+  #- name: "Generate the Gossip encryption key"
+  #  block:
+  #    - shell: docker run --rm {{ consul_docker_image }} consul keygen
+  #      register: consul_keygen
+  #
+  #    - set_fact: consul_key={{ consul_keygen.stdout }}  
+  #
+  #  when: 
+  #    - not bootstrap_state.stat.exists | bool
+  #
+  #- name: Create bootstrapped state file
+  #  file:
+  #    dest: "{{ consul_bootstrap_state }}"
+  #    state: touch
+  #    mode: 0600
+  #  when:
+  #    - not bootstrap_state.stat.exists | bool
+
+
+- name: "Create the config file"
+  template: src="consul-{{ consul_agent_mode }}.conf.j2" dest="{{ consul_conf_dir }}/consul.json"
+  notify:
+    - restart consul
+
+- name: "Start the service"
+  docker_service:
+    project_src: "{{ consul_conf_dir }}"
+    state: present

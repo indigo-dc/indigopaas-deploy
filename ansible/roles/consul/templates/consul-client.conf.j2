@@ -1,0 +1,13 @@
+{
+    "datacenter":"{{ consul_datacenter }}",
+    "domain":"consul",
+    "data_dir":"/opt/bitnami/consul/data",
+    "pid_file":"/opt/bitnami/consul/tmp/consul.pid",
+    "server": false,
+    "addresses": {
+        "http":"0.0.0.0"
+    },
+    "advertise_addr": "{{ consul_advertise_addr }}",
+    "retry_join": {{ consul_retry_join|to_json() }},
+    "encrypt": "{{ consul_key }}"
+}

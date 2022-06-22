@@ -1,0 +1,4 @@
+---
+# Package names for EL and derivatives
+python_dev_package: python-devel
+python_setuptools_package: python-setuptools

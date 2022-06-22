@@ -1,0 +1,22 @@
+{
+    "datacenter":"{{ consul_datacenter }}",
+    "domain":"consul",
+    "data_dir":"/opt/bitnami/consul/data",
+    "pid_file":"/opt/bitnami/consul/tmp/consul.pid",
+    "server": true,
+    "ui": {{ consul_enable_ui|to_json() }},
+    "bootstrap_expect": {{ consul_bootstrap_expect }},
+    "addresses": {
+        "http":"0.0.0.0"
+    },
+    "retry_join": {{ consul_retry_join|to_json() }},
+    "advertise_addr": "{{ consul_advertise_addr }}",
+    "ports": {
+        "http": 8500,
+        "dns": 8600,
+        "serf_lan": 8301,
+        "server": 8300
+    },
+    "serf_lan":"0.0.0.0",
+    "encrypt": "{{ consul_key }}"
+}

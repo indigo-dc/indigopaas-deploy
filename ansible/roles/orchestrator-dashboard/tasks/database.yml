@@ -1,10 +1,10 @@
 ---
 - name: "Check input variables"
   fail:
-    msg: "Change the password: you are using \"changeit\" as value for one or more variables - dashboard_mysql_root_password and dashboard_db_password"
+    msg: "Change the password: you are using \"changeit\" as value for one or more variables - dashboard_db_root_password and dashboard_db_password"
   when: item == "changeit"
   with_items:
-    - "{{ dashboard_mysql_root_password }}"
+    - "{{ dashboard_db_root_password }}"
     - "{{ dashboard_db_password }}"
   tags:
     - dashboard
@@ -23,12 +23,9 @@
   tags:
     - dashboard
 
-- name: "download sql file from github"
-  get_url:
-    url: '{{ dashboard_db_sql_file_url }}'
-    dest: '{{ dashboard_conf_dir }}/utils'
-  tags:
-    - dashboard
+- name: Create a network
+  docker_network:
+    name: dashboard_default
 
 - name: start database container container
   docker_container:
@@ -36,10 +33,14 @@
     image: "{{ dashboard_mysql_image }}"
     detach: true
     state: started
-    network_mode: host
+#    network_mode: host
+    networks:
+      - name: dashboard_default
+    ports:
+      - "{{dashboard_db_port}}:3306"
+      - "{{dashboard_db_port}}0:33060"
     volumes:
       - "{{ dashboard_db_data_dir }}:/var/lib/mysql"
-      - "{{ dashboard_conf_dir }}/utils/:/docker-entrypoint-initdb.d"
     restart_policy: always
     env_file: "{{ dashboard_conf_dir }}/.mysqlenv"
   tags:
@@ -48,7 +49,8 @@
 - name: wait for mysql to be up and running
   wait_for:
      host: "localhost"
-     port: "3306"
+#     port: "3306"
+     port: "{{dashboard_db_port}}"
      delay: 20
      timeout: 600
      connect_timeout: 10

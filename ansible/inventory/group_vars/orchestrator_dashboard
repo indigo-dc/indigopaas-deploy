@@ -1,6 +1,7 @@
 ---
-#dashboard_iam_issuer: 
-#dashboard_iam_client_id: 
-#dashboard_iam_client_secret: 
-#dashboard_orchestrator_url: 
-#dashboard_support_email: 
+dashboard_iam_issuer:  
+dashboard_iam_client_id:
+dashboard_iam_client_secret:
+dashboard_orchestrator_url:
+dashboard_support_email:
+dashboard_enable_advanced_menu: 'yes'

@@ -3,10 +3,9 @@
 
 - name: "Check input variables"
   fail:
-    msg: "Change the password: you are using <<changeit>> as value for one or more variables (im_mysql_root_password, im_mysql_password) " 
+    msg: "Change the password: you are using <<changeit>> as value for one or more variables (im_mysql_password) " 
   when: item == "changeit"
   with_items:
-    - "{{im_mysql_root_password}}"
     - "{{im_mysql_password}}"
 
 
@@ -16,37 +15,66 @@
     state: directory
     mode: 0755
 
+- name: Copy ansible.cfg
+  copy: src="files/ansible.cfg" dest="{{ im_conf_dir }}/ansible.cfg" 
+
+#- name: Start mysql
+#  block:
+#- name: "Set environment"
+#  set_fact: 
+#    im_mysql_host: 127.0.0.1      
+   
 - name: "Create mysql container env file"
   template:
     src=mysql-env.j2 dest="{{ im_conf_dir }}/.mysqlenv"
 
-- name: Copy ansible.cfg
-  copy: src="files/ansible.cfg" dest="{{ im_conf_dir }}/ansible.cfg" 
+- name: Create a network
+  docker_network:
+    name: im_default
 
-- name: Start mysql
+- name: "Start mysql"    
   docker_container: 
-    name: mysql
+    name: mysql-im
     image: "{{ im_mysql_image }}"
     detach: true
     state: started
-    network_mode: "host"
+#    network_mode: "host"
+    networks:
+      - name: im_default
+    ports:
+      - "{{im_mysql_port}}:3306"
+      - "{{im_mysql_port}}0:33060"
     volumes:
-    - "{{ im_mysql_data_dir }}:/var/lib/mysql"
+      - "{{ im_mysql_data_dir }}:/var/lib/mysql"
     restart_policy: always
     env_file: "{{ im_conf_dir }}/.mysqlenv"
 
-- name: wait for mysql to be up and running 
-  wait_for: 
-     host: "localhost" 
-     port: "3306"
+- name: wait for mysql to be up and running
+  wait_for:
+     host: "localhost"
+#     port: "3306"
+     port: "{{im_mysql_port}}"
      delay: 20
      timeout: 600
      connect_timeout: 10
+#  when: im_mysql_host is not defined   
+
 
 - name: "Create IM container env file"
   template:
     src=im-env.j2 dest="{{ im_conf_dir }}/.imenv"
 
+- name: "Create ssh key for proxy host"
+  block:
+    - file:
+        path="{{ im_conf_dir }}/.ssh" state=directory mode=0755      
+    - openssh_keypair:
+        path: "{{ im_conf_dir }}/.ssh/id_rsa"
+
+- name: "Copy logging conf file"
+  copy:
+    src: logging.conf
+    dest: "{{ im_conf_dir }}/logging.conf"    
 
 - name: Modify IM config file 
   include: im_config.yml
@@ -57,14 +85,20 @@
     image: "{{ im_image }}"
     detach: true
     state: started
-    network_mode: "host"
+#    network_mode: "host"
+    networks:
+      - name: im_default
+    ports:
+      - "8800:8800"
+      - "8899:8899"
     pull: yes
     env:
         ANSIBLE_VERSION: '{{ im_ansible_version }}'
     volumes:
     - "{{im_log_dir}}:/var/log/im"
     - "{{im_conf_dir}}/im.cfg:/etc/im/im.cfg"
-    - "{{im_conf_dir}}/ansible.cfg:/etc/ansible/ansible.cfg"
+    - "{{im_conf_dir}}/logging.conf:/etc/im/logging.conf"
+    - "{{ im_conf_dir }}/.ssh:/root/.ssh"  
     restart_policy: always
     env_file: "{{ im_conf_dir }}/.imenv"
 

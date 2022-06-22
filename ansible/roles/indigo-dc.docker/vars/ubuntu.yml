@@ -1,0 +1,4 @@
+---
+# Package names for Ubuntu
+python_dev_package: python-dev
+python_setuptools_package: python-setuptools

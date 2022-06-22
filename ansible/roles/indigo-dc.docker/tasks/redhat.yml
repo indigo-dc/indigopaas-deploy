@@ -1,0 +1,30 @@
+---
+- name: "[EL] Fail if distro is not supported nor tested (ansible version < 2.5)"
+  fail:
+    msg="The role is designed only for RedHat/CentOS 7.2 or later"
+  when:
+    - ansible_version.minor < 5
+    - ansible_distribution not in ('RedHat', 'CentOS') or ( ansible_distribution_version | version_compare('7.2', '<') )
+
+- name: "[EL] Fail if distro is not supported nor tested (ansible version >= 2.5)"
+  fail:
+    msg="The role is designed only for RedHat/CentOS 7.2 or later"
+  when:
+    - ansible_version.minor >= 5
+    - ansible_distribution not in ('RedHat', 'CentOS') or ( ansible_distribution_version is version('7.2', '<') )
+
+- name: "[EL] Install required packages"
+  yum: 
+   name: 
+    - yum-utils
+    - device-mapper-persistent-data
+    - lvm2
+   
+- name: "[EL] Add Docker yum repository"
+  shell: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+  args:
+    creates: /etc/yum.repos.d/docker-ce.repo 
+
+- name: "[EL] Perform common tasks"
+  include: common.yml
+

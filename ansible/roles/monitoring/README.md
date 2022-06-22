@@ -48,8 +48,8 @@ Dependencies
 indigo-dc.docker
 
 
-Author Information
+Information
 ------------------
 
-Marica Antonacci (marica.antonacci@ba.infn.it) <br>
+iotwins-infn-cloud-support@lists.cnaf.infn.it
 INFN Italy

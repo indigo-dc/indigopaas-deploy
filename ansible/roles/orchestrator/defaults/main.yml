@@ -1,33 +1,34 @@
 ---
 # defaults file for indigopaas
 
-orchestrator_conf_dir: /etc/orchestrator
+orchestrator_conf_dir: /root/orchestrator/etc/orchestrator
 
 orchestrator_mysql_image: mysql:5.7
-orchestrator_mysql_data_dir: /data/mysql
-orchestrator_mysql_root_password: changeit
+orchestrator_mysql_data_dir: /root/orchestrator/data/mysql
+orchestrator_mysql_root_password: ChangeMe
 orchestrator_dbname: orchestrator
 orchestrator_workflow_dbname: workflow
 orchestrator_mysql_user: orchestrator
-orchestrator_mysql_password: changeit
-orchestrator_mysql_host: 127.0.0.1
+orchestrator_mysql_password: ChangeMe
 orchestrator_dbport: 3306
-orchestrator_image: indigodatacloud/orchestrator:2.4.0-final
+orchestrator_image: indigodatacloud/orchestrator:2.7.0-final
 
-orchestrator_url: http://localhost:8080
-orchestrator_im_url: "https://servproject.i3m.upv.es:8811"
-orchestrator_cmdb_url: "http://indigo.cloud.plgrid.pl/cmdb"
-orchestrator_slam_url: "http://indigo.cloud.plgrid.pl/slam"
-orchestrator_cpr_url: "https://indigo-paas.cloud.ba.infn.it/cpr"
-orchestrator_monitoring_url: "http://90.147.170.181"
-orchestrator_onezone_url: "https://onezone.cloud.ba.infn.it:8443"
+orchestrator_url: "https://iotwins-paas.cloud.cnaf.infn.it/orchestrator"
+orchestrator_im_url: "http://192.168.1.27:8800/"
+orchestrator_cmdb_url: "http://192.168.1.27:5984/indigo-cmdb-v2/_design/schema/_rewrite/"
+orchestrator_slam_url: "http://192.168.1.27:5002/rest/slam"
+orchestrator_cpr_url: "http://192.168.1.27:8081/"
+orchestrator_monitoring_url: "http://192.168.1.5:8082"
+orchestrator_onezone_url: "https://onezone.cloud.cnaf.infn.it/"
 
-orchestrator_iam_issuer: https://iam-test.indigo-datacloud.eu/
-orchestrator_iam_client_id: ""
-orchestrator_iam_client_secret: ""
-orchestrator_clues_iam_client_id: ""
-orchestrator_clues_iam_client_secret: ""
-orchestrator_iam_audience: "changeit"
-orchestrator_iam_admingroup: "orchestrator-admins"
+oidc_issuer: 
+oidc_orchestrator_client_id: 
+oidc_orchestrator_client_secret: 
+oidc_orchestrator_scopes: "openid,profile,email,address,phone,offline_access"
+oidc_clues_client_id: 
+oidc_clues_client_secret: 
+oidc_audience: "5ea40b08-964e-4600-b9c3-8859730a81cb"
+oidc_admingroup: "orchestrator-admins"
 
-orchestrator_vault_role: "orchestrator"
+orchestrator_vault_url:
+orchestrator_vault_role:

@@ -1,9 +1,14 @@
 ---
 # defaults file for indigopaas/proxy
-letsencrypt_email: ""
-domain_name: ""
-proxy_conf_dir: /etc/proxy
+letsencrypt_email: 
+domain_name: 
+proxy_ssl_cert_file: /root/cert/bundle.crt
+proxy_ssl_key_file: /root/cert/key.pem
+proxy_use_letsencrypt: false        
+proxy_conf_dir: /root/proxy/etc/proxy
+proxy_nginx_image: nginx:1.21.0
 #
 cpr_port: 8081
+slat_port: 5002
 proxy_enable_orchestrator_dashboard_endpoint: true
 orchestrator_dashboard_port: 5001

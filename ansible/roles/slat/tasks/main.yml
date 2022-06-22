@@ -1,0 +1,10 @@
+---
+# tasks file for orchestrator-dashboard
+
+- include: certs.yml
+  when: slat_enable_https|bool
+
+- include: database.yml 
+  when: slat_db_host is not defined
+
+- include: slat.yml 

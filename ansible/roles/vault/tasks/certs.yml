@@ -1,23 +1,19 @@
 ---
-- name: Install letsencrypt
-  apt: name=letsencrypt state=present update_cache=true
-  tags:
-    - certs
-
-- name: Create letsencrypt certificate
-  shell: letsencrypt certonly -n --standalone -m {{ vault_letsencrypt_email }} --agree-tos -d {{ vault_fqdn }}
-  args:
-    creates: /etc/letsencrypt/live/{{ vault_fqdn }}
-  tags:
-    - certs
-
-- name: Give right permissions to certs dir
+- name: "create directory path to store the configuration files"
   file:
-    path: "{{ item }}"
+    path: "{{ vault_conf_dir }}/certs"
     state: directory
-    mode: 0711
-  with_items:
-    - "{{ vault_letsencrypt_certs_dir }}/archive"
-    - "{{ vault_letsencrypt_certs_dir }}/live"
-  tags:
-    - certs
+
+- name: "Copy the certificate"
+  copy:
+    src: "{{ vault_ssl_cert_file }}"
+    dest: "{{ vault_conf_dir }}/certs/cert.pem"
+
+- name: "Copy the key"
+  copy:
+    src: "{{ vault_ssl_key_file }}"
+    dest: "{{ vault_conf_dir }}/certs/key.pem"
+    
+- set_fact:
+    vault_cert_file_path: "{{ vault_conf_dir }}/certs/cert.pem"
+    vault_key_file_path: "{{ vault_conf_dir }}/certs/key.pem"

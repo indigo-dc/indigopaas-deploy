@@ -1,0 +1,31 @@
+---
+
+- name: "[Ubuntu] Fail if release is not supported (Ubuntu version >= 16.04)"
+  fail:
+    msg="The role is designed only for Ubuntu 16.04 or higher"
+  when:
+     - ansible_distribution_version is version('16.04', '<')
+
+- name: Install docker requisites
+  apt: name=apt-transport-https,ca-certificates,software-properties-common
+
+- name: "[Ubuntu] Import the Docker repository key"
+  apt_key:
+    url=https://download.docker.com/linux/ubuntu/gpg
+    state=present
+    id=0EBFCD88
+
+- name: "[Ubuntu] Add docker apt repo"
+  apt_repository:
+    repo='deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable'
+    state=present
+  register: add_docker_repo
+
+- name: "[Ubuntu] Force an apt cache refresh"
+  apt: update_cache=yes
+  changed_when: False
+  when: add_docker_repo is changed
+
+- name: "[Ubuntu] Perform common tasks"
+  include: common.yml
+

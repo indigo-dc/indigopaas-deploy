@@ -1,4 +1,4 @@
-cpr
+CPR
 =========
 
 Deploy INDIGO CPR service using docker containers. <br>
@@ -14,6 +14,7 @@ Role Variables
 
 | Variable name  | Default Value | Description
 | -------------- | ------------- |------------- |
+| cpr_port  | 8081 | CPR service port |
 | cpr_image            | indigodatacloud/cloudproviderranker:indigo_2 | Docker image used for running the service |
 
 
@@ -29,10 +30,14 @@ Example Playbook
     - hosts: servers
       roles:
          - { role: username.rolename, x: 42 }
+	
 
 
-Author Information
-------------------
 
-Marica Antonacci (marica.antonacci@ba.infn.it) <br>
+
+Information
+-----------
+
+iotwins-infn-cloud-support@lists.cnaf.infn.it
+
 INFN Italy

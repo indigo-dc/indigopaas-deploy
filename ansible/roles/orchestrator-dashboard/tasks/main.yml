@@ -5,9 +5,9 @@
   when: dashboard_enable_https|bool
 
 - include: database.yml 
-  when: dashboard_enable_db|bool
+  when: dashboard_install_db|bool
 
 - include: vault.yml
-  when: dashboard_enable_vault|bool
+  when: dashboard_enable_vault|bool and dashboard_configure_vault|bool
 
 - include: dashboard.yml 

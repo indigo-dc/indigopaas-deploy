@@ -1,0 +1,33 @@
+---
+# defaults file for indigopaas
+
+slat_port: 5002
+slat_conf_dir: /root/slat/etc/slat
+slat_image_name: "marica/slat:latest"
+
+slat_iam_issuer: 
+slat_iam_client_id: 
+slat_iam_client_secret: A
+slat_trusted_oidc_idp_list: [{ 'iss': 'https://iotwins-iam.cloud.cnaf.infn.it', 'type': 'indigoiam' }]
+
+slat_admin_group: cnaf
+
+slat_log_level: 'info'
+
+slat_gunicorn_workers: "2"
+
+slat_mysql_image: mysql:5.7
+slat_db_data_dir: /root/slat/data/mysql
+#slat_cmdb_url: https://iotwins-paas-test.cloud.cnaf.infn.it/cmdb
+slat_cmdb_url: http://192.168.1.27:5984/indigo-cmdb-v2/_design/schema/_rewrite/
+
+slat_mysql_root_password: ChengeMe 
+slat_db_name: slat
+slat_db_user: slat
+slat_db_password: ChangeMe
+slat_db_port: 3307
+
+slat_enable_https: False 
+# self-signed, letsencrypt
+slat_ssl_cert_generation: "self-signed"
+

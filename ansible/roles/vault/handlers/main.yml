@@ -1,2 +1,7 @@
 ---
 # handlers file for vault
+
+- name: restart vault
+  docker_service:
+    project_src: "{{ vault_conf_dir }}"
+    restarted: yes

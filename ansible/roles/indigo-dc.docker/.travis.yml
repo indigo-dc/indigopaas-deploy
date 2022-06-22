@@ -1,0 +1,32 @@
+---
+jobs:
+  include:
+   - os: linux
+     dist: xenial
+   - os: linux
+     dist: bionic
+
+sudo: required
+
+language: python
+python: "2.7"
+
+install:
+  # Check ansible version
+  - sudo pip install ansible
+
+  # Check ansible version
+  - ansible --version
+
+  # Create ansible.cfg with correct roles_path
+  - printf '[defaults]\nroles_path=../' >ansible.cfg
+
+script:
+  # Basic role syntax check
+  - sudo ansible-playbook tests/test.yml -i tests/inventory --syntax-check
+
+  # Basic role check
+  - sudo ansible-playbook tests/test.yml -i tests/inventory
+
+notifications:
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/

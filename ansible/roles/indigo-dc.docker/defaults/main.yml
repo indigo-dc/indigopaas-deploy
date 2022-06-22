@@ -1,0 +1,16 @@
+---
+# defaults file for ansible-role-docker
+docker_pip_package: python3-pip
+docker_config: {}
+docker_options:
+  bip:             "{{ docker_bridge_ip_cidr  |default(None) }}"
+  mtu:             "{{ docker_bridge_mtu      |default(None) }}"
+  dns:             "{{ docker_dns             |default(None) }}"
+  dns-search:      "{{ docker_dns_search      |default(None) }}"
+  registry-mirror: "{{ docker_registry_mirror |default(None) }}"
+  storage-driver : "{{ docker_storage_driver  |default(None) }}"
+  log-driver:      "{{ docker_log_driver      |default('json-file') }}"
+  log-opts:        "{{ docker_logs_opts       |default( { 'max-file': '3', 'max-size': '100m' } ) }}"
+  
+
+

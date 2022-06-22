@@ -1,0 +1,20 @@
+version: '3.3'
+
+services:
+   vault:
+     image: "{{ vault_image_name }}"
+     container_name: vault
+     command: vault server -config=/vault/config/config.hcl
+     privileged: true
+     volumes:
+       - "{{ vault_conf_dir }}:/vault/config/"
+       - "{{ vault_cert_file_path }}:/certs/cert.pem"
+       - "{{ vault_key_file_path }}:/certs/key.pem"
+       - "{{ vault_log_dir }}:/vault/logs"
+       - "{{ vault_data_dir }}:/vault/file/" 
+     network_mode: host
+#     ports:
+#       - 8200:8200
+     restart: always
+     environment:
+       VAULT_ADDR: "https://{{ vault_fqdn }}:{{ vault_port }}"

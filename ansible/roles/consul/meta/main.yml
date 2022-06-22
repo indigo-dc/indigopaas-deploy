@@ -1,0 +1,15 @@
+galaxy_info:
+  author: marica.antonacci@ba.infn.it
+  description: Deploy Hashicorp Consul
+  company: INDIGO-DataCloud
+  license: Apache
+  min_ansible_version: 2.4
+  platforms:
+    - name: Ubuntu
+      versions:
+        - bionic
+        - focal  
+  galaxy_tags:
+   - indigo-paas
+dependencies:
+   - { role: common }

@@ -1,0 +1,35 @@
+---
+- name: Check variable letsencrypt_email
+  fail:
+    msg: "Empty value not allowed for variable letsencrypt_email"
+  when: letsencrypt_email|trim == '' 
+
+- name: Check variable domain_name
+  fail:
+    msg: "Empty value not allowed for variable domain_name"
+  when: domain_name|trim == ''
+
+- name: "Create the docker-compose file"
+  template:
+    src="docker-compose.yml.j2" dest="{{ proxy_conf_dir }}/docker-compose.yml"
+
+- name: "Start the service"
+  docker_service:
+    project_src: "{{ proxy_conf_dir }}"
+    state: present
+
+- name: "Wait for the generation of the certificates"
+  wait_for: 
+    path: "{{ proxy_conf_dir }}/config/etc/letsencrypt/live/{{ domain_name }}/fullchain.pem"
+    sleep: 5
+
+- name: sleep for further 10 seconds and continue with play
+  wait_for:
+    timeout: 10
+  delegate_to: localhost
+
+- name: Create nginx conf
+  template: src=nginx-default.j2 dest="{{ proxy_conf_dir }}/config/nginx/site-confs/default"
+  notify: 
+    - restart proxy
+

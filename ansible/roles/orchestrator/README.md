@@ -54,8 +54,8 @@ Example Playbook
          - { role: username.rolename, x: 42 }
 
 
-Author Information
+Information
 ------------------
 
-Marica Antonacci (marica.antonacci@ba.infn.it) <br>
+
 INFN Italy

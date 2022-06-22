@@ -1,0 +1,25 @@
+---
+- name: Deploy Consul service
+  hosts: consul_server
+  become: yes        
+  #  gather_facts: false
+  #  pre_tasks:
+  #    - name: Check python is installed
+  #      raw:  test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+  #      changed_when: false
+  #    - name: Gathering Facts
+  #      setup:
+  roles:
+    - { role: consul, consul_agent_mode: "server" }
+- name: Deploy Consul Client
+  hosts: consul_client
+  become: yes
+  #  gather_facts: false
+  #  pre_tasks:
+  #    - name: Check python is installed
+  #      raw:  test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+  #      changed_when: false
+  #    - name: Gathering Facts
+  #      setup:
+  roles:
+    - { role: consul, consul_agent_mode: "client" }      

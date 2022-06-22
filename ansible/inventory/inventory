@@ -1,31 +1,30 @@
 [proxy]
-172.30.24.3
+192.168.1.27 ansible_connection=local
 
 [cmdb]
-172.30.24.4
+192.168.1.27 ansible_connection=local
 
-[slam]
-90.147.71.144 #public ip
+[slat]
+192.168.1.27 ansible_connection=local
 
 [cpr]
-172.30.24.4
+192.168.1.27 ansible_connection=local
 
 [im]
-172.30.24.5
+192.168.1.27 ansible_connection=local
 
-[monitoring_server]
-172.30.24.6
+#[monitoring_server]
+#192.168.1.5
 
-[monitoring_agent]
-172.30.24.6
+#[monitoring_agent]
+#192.168.1.5
 
 [orchestrator]
-172.30.24.8
+192.168.1.19
 
-[monitoring:children]
-monitoring_server
-monitoring_agent
+#[monitoring:children]
+#monitoring_server
+#monitoring_agent
 
 [orchestrator_dashboard]
-172.30.24.3 
-
+192.168.1.27 ansible_connection=local

@@ -1,7 +1,7 @@
 ---
 - name: Download IM config file
   get_url:
-    url: "https://raw.githubusercontent.com/indigo-dc/im/{{im_repo_tag}}/etc/im.cfg"
+    url: "https://raw.githubusercontent.com/grycap/im/{{im_repo_tag}}/etc/im.cfg"
     dest: "{{im_conf_dir}}/im.cfg"
 
 - name: Update configuration

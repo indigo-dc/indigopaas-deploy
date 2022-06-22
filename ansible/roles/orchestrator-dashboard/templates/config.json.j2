@@ -2,37 +2,56 @@
     "IAM_CLIENT_ID": "{{ dashboard_iam_client_id }}",
     "IAM_CLIENT_SECRET": "{{ dashboard_iam_client_secret }}",
     "IAM_BASE_URL": "{{ dashboard_iam_issuer }}",
+{% if dashboard_group_membership|length > 0 %}
+    "IAM_GROUP_MEMBERSHIP": {{ dashboard_group_membership|to_json() }},
+{% endif %}
     "ORCHESTRATOR_URL": "{{ dashboard_orchestrator_url }}",
     "TOSCA_TEMPLATES_DIR": "/opt/tosca-templates",
     "TOSCA_PARAMETERS_DIR": "/opt/tosca-parameters",
     "TOSCA_METADATA_DIR": "/opt/tosca-metadata",
-{% if dashboard_slam_url is defined %}
-    "SLAM_URL": "{{ dashboard_slam_url }}",
-{% endif %}
-{% if dashboard_cmdb_url is defined %}
-    "CMDB_URL": "{{ dashboard_cmdb_url }}",
-{% endif %}
-{% if dashboard_im_url is defined %}
-    "IM_URL": "{{ dashboard_im_url }}",
-{% endif %}
-{% if dashboard_enable_db %}
     "CALLBACK_URL": "https://{{ dashboard_fqdn }}/callback",
-    "DB_HOST": "{{ dashboard_db_host }}",
-    "DB_USER": "{{ dashboard_db_user }}",
-    "DB_PASSWORD": "{{ dashboard_db_password }}",
-    "DB_NAME": "{{ dashboard_db_name }}",
-    "DB_PORT": "{{ dashboard_db_port }}",
+    "SQLALCHEMY_DATABASE_URI": "mysql+pymysql://{{dashboard_db_user}}:{{dashboard_db_password}}@{{dashboard_db_host}}/{{dashboard_db_name}}",
+{% if dashboard_external_links|length > 0 %}
+    "EXTERNAL_LINKS": [
+    {% for link in dashboard_external_links %}
+    {{ link|to_json() }}{% if not loop.last %},{% endif %}
+    {% endfor %}
+    ],
 {% endif %}
-{% if dashboard_notification_enable %}
+    "CONFIGURATION_PROFILE": "{{ dashboard_configuration_profile }}",
+{% if dashboard_notification_enable|bool %}
     "MAIL_SERVER": "{{ dashboard_mail_server }}",
     "MAIL_PORT": "{{ dashboard_mail_port }}",
     "MAIL_SENDER": "{{ dashboard_mail_sender }}",
+    "MAIL_USERNAME": "{{ dashboard_mail_username }}",
+    "MAIL_PASSWORD": "{{ dashboard_mail_password  }}",
+    "MAIL_PORT": "{{ dashboard_mail_port }}",
+    "MAIL_USE_TLS": {{ dashboard_mail_use_tls|to_json()  }},
+    "MAIL_SENDER": "{{ dashboard_mail_sender }}",
 {% endif %}
-{% if dashboard_enable_vault %}
+{% if dashboard_enable_vault|bool %}
+    "FEATURE_VAULT_INTEGRATION": "yes",
     "VAULT_URL": "{{ dashboard_vault_url}}",
+    "VAULT_ROLE": "{{ dashboard_vault_role }}",
+    "VAULT_OIDC_AUDIENCE": "{{ dashboard_bound_audience }}",
+{% endif %}
+{% if dashboard_ldap_socket is defined %}
+    "LDAP_SOCKET": "{{ dashboard_ldap_socket }}",
+{% endif %}
+{% if dashboard_ldap_ca_cert_local_path is defined %}
+    "LDAP_TLS_CACERT_FILE": "/trusted_certs/{{ dashboard_ldap_ca_cert_local_path | basename }}",
+{% endif %}
+{% if dashboard_ldap_base is defined %}
+    "LDAP_BASE": "{{ dashboard_ldap_base }}",
+{% endif %}    
+{% if dashboard_ldap_bind_user is defined %}
+    "LDAP_BIND_USER": "{{ dashboard_ldap_bind_user }}",
+{% endif %}
+{% if dashboard_ldap_bind_password is defined %}
+    "LDAP_BIND_PASSWORD": "{{ dashboard_ldap_bind_password }}",
 {% endif %}
     "ADMINS": "{{ dashboard_administrators }}",
     "SUPPORT_EMAIL": "{{ dashboard_support_email }}",
-    "ENABLE_ADVANCED_MENU": "{{ dashboard_enable_advanced_menu }}",
+    "FEATURE_ADVANCED_MENU": {% if dashboard_enable_advanced_menu|bool %}"yes"{% else %}"no"{% endif %},
     "LOG_LEVEL": "{{ dashboard_log_level }}"
 }

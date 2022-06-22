@@ -41,7 +41,7 @@ Role Variables
 | dashboard_enable_db | false | Enable mysql database
 | dashboard_mysql_image | mysql:5.7 | MySQL docker image
 | dashboard_db_sql_file_url | https://raw.githubusercontent.com/maricaantonacci/orchestrator-dashboard/add_db/utils/orchestrator_dashboard.sql | Url for sql file
-| dashboard_mysql_root_password | changeit | Dashboard Mysql root password <br> **Please change it otherwise the role will fail**
+| dashboard_db_root_password | changeit | Dashboard Mysql root password <br> **Please change it otherwise the role will fail**
 | dashboard_db_password | changeit | Dashboard Mysql user password <br> **Please change it otherwise the role will fail**|
 | dashboard_enable_vault | false | Enable vault integration
 | dashboard_vault_token: | | vault token to access to configure
@@ -70,6 +70,9 @@ Apache Licence v2
 http://www.apache.org/licenses/LICENSE-2.0
 
 
-Author Information
+Information
 ------------------
+
+iotwins-infn-cloud-support@lists.cnaf.infn.it
+INFN Italy
 

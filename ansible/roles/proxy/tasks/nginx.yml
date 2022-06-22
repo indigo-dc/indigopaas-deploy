@@ -1,0 +1,41 @@
+---
+
+- name: "Create the docker-compose file"
+  template:
+    src="docker-compose.yml.j2" dest="{{ proxy_conf_dir }}/docker-compose.yml"
+
+- name: "create directory path to store the configuration files"
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+  loop:
+    - "{{ proxy_conf_dir }}/nginx"
+    - "{{ proxy_conf_dir }}/nginx/certs"
+
+- name: "Create nginx conf"
+  template: src=nginx-default.j2 dest="{{ proxy_conf_dir }}/nginx/default"      
+  notify: 
+    - restart proxy
+
+- name: "Create nginx ssl conf"
+  template: src=nginx-ssl.conf.j2 dest="{{ proxy_conf_dir }}/nginx/ssl.conf"
+  notify:
+    - restart proxy
+
+- name: "Copy the certificate"
+  copy:
+    src: "{{ proxy_ssl_cert_file }}"
+    dest: "{{ proxy_conf_dir }}/nginx/certs/cert.pem"
+
+- name: "Copy the key"
+  copy:
+    src: "{{ proxy_ssl_key_file }}"
+    dest: "{{ proxy_conf_dir }}/nginx/certs/privkey.pem"    
+
+- name: "Start the service"
+  docker_service:
+    project_src: "{{ proxy_conf_dir }}"
+    state: present
+
+

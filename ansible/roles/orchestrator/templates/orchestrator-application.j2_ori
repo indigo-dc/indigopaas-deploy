@@ -1,0 +1,16 @@
+  oidc:
+   enabled: true
+   iam-properties:
+     {% for oidc in orchestrator_oidc_properties -%}
+     "[{{ oidc.issuer }}]":
+       audience: "{{ oidc.audience }}"
+       admingroup: "{{ oidc.admingroup }}"
+       orchestrator:
+         client-id: "{{ oidc.orchestrator.client_id }}"
+         client-secret: "{{ oidc.orchestrator.client_secret }}"
+         scopes: [ {{ oidc.orchestrator.scopes | join(',') }} ]
+       clues:
+         client-id: "{{ oidc.clues.client_id }}"
+         client-secret: "{{ oidc.clues.client_secret }}"
+      {% endfor %}
+

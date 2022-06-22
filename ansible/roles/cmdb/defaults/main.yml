@@ -1,16 +1,17 @@
 ---
 # defaults file for indigopaas/cmdb
-cmdb_conf_dir: /etc/cmdb
+cmdb_conf_dir: /root/cmdb/etc/cmdb
 cmdb_image: indigodatacloud/cmdb:indigo_2
-cmdb_data_dir: /data/cmdb
+cmdb_data_dir: /root/cmdb/data/cmdb
 
 cmdb_repo_version: v0.5 
-cmdb_target_url: http://localhost:5984/indigo-cmdb-v2/_design/schema/_rewrite
-cmdb_crud_target_url: http://localhost:5984/indigo-cmdb-v2
+
+cmdb_target_url: http://192.168.1.27:5984/indigo-cmdb-v2/_design/schema/_rewrite
+cmdb_crud_target_url: http://192.168.1.27:5984/indigo-cmdb-v2
 cmdb_crud_username: cmdb
-cmdb_crud_password: changeit
+cmdb_crud_password: ChangeMe
 cmdb_crud_admin_group: cmdb-dev-admins
-cmdb_oidc_userinfo: https://iam-test.indigo-datacloud.eu/userinfo
+cmdb_oidc_userinfo:
 
 couchdb_image: couchdb:1.6.1
-couchdb_data_dir: /data/couchdb
+couchdb_data_dir: /root/couchdb2/data/couchdb

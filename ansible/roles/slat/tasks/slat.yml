@@ -1,0 +1,41 @@
+---
+- name: "create directory path to store the configuration files"
+  file:
+    path: "{{ slat_conf_dir }}"
+    state: directory
+
+- name: "create slat configuration file"
+  template:
+    src: config.json.j2
+    dest: "{{ slat_conf_dir }}/config.json"
+
+- set_fact:
+    volumes_to_mount:
+      - "{{ slat_conf_dir }}/config.json:/app/instance/config.json"
+
+- block:
+    - set_fact:
+        certs_volumes_to_mount:
+          - "{{ slat_ssl_cert_path }}:/certs/cert.pem"
+          - "{{ slat_ssl_key_path }}:/certs/key.pem"
+    - set_fact:
+        volumes_to_mount: "{{ volumes_to_mount + certs_volumes_to_mount  }}"
+  when: slat_enable_https|bool
+
+    
+- name: start slat container
+  docker_container:
+    name: slat
+    image: "{{ slat_image_name }}"
+    detach: true
+    state: started
+    networks:
+      - name: slat_default
+    ports:
+      - "{{slat_port}}:5001"
+    pull: yes
+    env:
+      ENABLE_HTTPS: '"{{ slat_enable_https }}"'
+      WORKERS: "{{ slat_gunicorn_workers }}"
+    volumes: "{{volumes_to_mount}}"
+    restart_policy: always

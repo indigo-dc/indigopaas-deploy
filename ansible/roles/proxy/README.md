@@ -17,8 +17,8 @@ Role Variables
 
 | Variable name  | Default Value | Description
 | -------------- | ------------- |------------- |
-| letsencrypt_email | ""| Provide a valid email address for letsencrypt notifications
-| domain_name | ""| DNS name of the node (needed for generating the certificates)
+| letsencrypt_email | ""| Not used, but variable must be set
+| domain_name | ""| Not used, but variable must be set
 
 
 Dependencies
@@ -26,8 +26,8 @@ Dependencies
 
 
 
-Author Information
+Information
 ------------------
 
-Marica Antonacci (marica.antonacci@ba.infn.it) <br>
+iotwins-infn-cloud-support@lists.cnaf.infn.it
 INFN Italy

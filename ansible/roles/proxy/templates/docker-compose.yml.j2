@@ -1,6 +1,7 @@
 ---
 version: "3"
 services:
+{% if proxy_use_letsencrypt %}
   letsencrypt:
     image: linuxserver/letsencrypt
     container_name: letsencrypt
@@ -21,4 +22,23 @@ services:
     ports:
       - 443:443
       - 80:80 #optional
+{% if "slat" in groups and groups['slat']|length >0 %}
+      - "8443:8443"
+{% endif %}
     restart: unless-stopped
+{% else %}
+  nginx:
+    container_name: nginx
+    image: {{ proxy_nginx_image }}
+    restart: unless-stopped
+    ports:
+      - "443:443"
+      - "80:80"
+{% if "slat" in groups and groups['slat']|length >0 %}
+      - "8443:8443"
+{% endif %}
+    volumes:
+      - {{ proxy_conf_dir }}/nginx/default:/etc/nginx/conf.d/default.conf:ro
+      - {{ proxy_conf_dir }}/nginx/ssl.conf:/config/nginx/ssl.conf:ro
+      - {{ proxy_conf_dir }}/nginx/certs:/etc/nginx/certs
+{% endif %}

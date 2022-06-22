@@ -1,0 +1,30 @@
+---
+- name: Install letsencrypt
+  apt: name=letsencrypt state=present update_cache=true
+  tags:
+    - certs
+
+- name: Create letsencrypt certificate
+  shell: letsencrypt certonly -n --standalone -m {{ vault_letsencrypt_email }} --agree-tos -d {{ vault_fqdn }}
+  args:
+    creates: /etc/letsencrypt/live/{{ vault_fqdn }}
+  tags:
+    - certs
+
+- name: Give right permissions to certs dir
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0711
+  with_items:
+    - "/etc/letsencrypt/archive"
+    - "/etc/letsencrypt/live"
+  tags:
+    - certs
+
+- set_fact: 
+    vault_cert_file_path: "/etc/letsencrypt/live/{{ vault_fqdn }}/fullchain.pem"
+    vault_key_file_path: "/etc/letsencrypt/live/{{ vault_fqdn }}/privkey.pem"
+  tags:
+    - certs
+

@@ -1,19 +1,22 @@
 ---
-#orchestrator_mysql_root_password: 
-#orchestrator_mysql_password: 
-#
-#orchestrator_im_url: 
-#orchestrator_cmdb_url: 
-#orchestrator_slam_url: 
-#orchestrator_cpr_url: 
-#orchestrator_monitoring_url: 
-#orchestrator_onezone_url: 
-#orchestrator_url: 
-#
-#orchestrator_iam_audience: 
-#orchestrator_iam_issuer: 
-#orchestrator_iam_client_id: 
-#orchestrator_iam_client_secret: 
-#orchestrator_clues_iam_client_id: 
-#orchestrator_clues_iam_client_secret: 
+orchestrator_mysql_root_password:
+orchestrator_mysql_password:
 
+orchestrator_url: https://iotwins-paas.coud.cnaf.infn.it/orchestrator
+orchestrator_im_url: "http://192.168.1.27:8800/"
+orchestrator_cmdb_url: "http://192.168.1.27:5984/indigo-cmdb-v2/_design/schema/_rewrite/"
+orchestrator_slam_url: "http://192.168.1.27:5002/rest/slam"
+orchestrator_cpr_url: "http://192.168.1.27:8081/"
+orchestrator_monitoring_url: "http://192.168.1.5:8082"
+orchestrator_onezone_url: ""
+
+orchestrator_iam_issuer: 
+orchestrator_iam_client_id:
+orchestrator_iam_client_secret:
+orchestrator_clues_iam_client_id:
+orchestrator_clues_iam_client_secret:
+orchestrator_iam_audience:
+
+orchestrator_iam_admingroup: "orchestrator-admins"
+orchestrator_vault_url:
+orchestrator_vault_role:

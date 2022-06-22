@@ -1,0 +1,19 @@
+version: '3.7'
+
+services:
+
+  consul:
+    image: {{ consul_docker_image }}
+    container_name: "consul-{{consul_agent_mode}}"
+    volumes:
+      - {{ consul_conf_dir }}/consul.json:/opt/bitnami/consul/conf/consul.json
+      - {{ consul_data_dir }}:/opt/bitnami/consul/data
+    ports:
+        - '8300:8300'
+        - '8301:8301'
+        - '8301:8301/udp'
+        - '8500:8500'
+        - '8600:8600'
+        - '8600:8600/udp'  
+    environment:
+      CONSUL_AGENT_MODE: "{{ consul_agent_mode }}"

@@ -1,0 +1,13 @@
+---
+# Common setup tasks for all supported OS families
+
+- name: "[Common] Install Docker CE package"
+  package:
+    name=docker-ce
+    state=present
+
+- name: "[Common] Ensure docker-ce is enabled at boot time"
+  service: name=docker enabled=yes
+
+- name: "Configure docker"
+  include: configure.yml

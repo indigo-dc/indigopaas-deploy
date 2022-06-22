@@ -1,14 +1,22 @@
 ui = true
 
 listener "tcp" {
-  address = "{{ vault_fqdn }}:{{ vault_port }}"
-  tls_cert_file = "/certs/live/{{ vault_fqdn }}/fullchain.pem"
-  tls_key_file = "/certs/live/{{ vault_fqdn }}/privkey.pem"
+  address = "{{ vault_listener_address }}:{{ vault_port }}"
+  tls_cert_file = "/certs/cert.pem"
+  tls_key_file = "/certs/key.pem"
+  tls_cipher_suites = "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256"
 }
 
+{% if vault_storage_backend == "consul" %}
+storage "consul" {
+  address = "127.0.0.1:8500"
+  path    = "vault"
+}
+{% elif vault_storage_backend == "file" %}
 storage "file" {
   path = "/vault/file"
 }
+{% endif %}
 
 log_level = "trace"
 disable_mlock = true

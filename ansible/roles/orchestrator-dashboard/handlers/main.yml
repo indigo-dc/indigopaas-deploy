@@ -1,2 +1,8 @@
 ---
 # handlers file for dash_role
+
+- name: restart dashboard
+  docker_container:
+    name: orchestrator-dashboard
+    state: started
+    restart: yes

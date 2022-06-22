@@ -1,0 +1,54 @@
+---
+- name: "Check input variables"
+  fail:
+    msg: "Change the password: you are using \"changeit\" as value for one or more variables - slat_mysql_root_password and dashboard_db_password"
+  when: item == "changeit"
+  with_items:
+    - "{{ slat_mysql_root_password }}"
+    - "{{ slat_db_password }}"
+
+- name: "create directory path to store the configuration files"
+  file:
+    path: "{{ slat_conf_dir }}"
+    state: directory
+
+#- name: "Set database host"
+#  set_fact: 
+#    slat_db_host: 127.0.0.1
+
+- name: "Create mysql container env file"
+  template:
+    src: mysqlenv.j2
+    dest: "{{ slat_conf_dir }}/.mysqlenv"
+
+#iotwins
+- name: Create a network
+  docker_network:
+    name: slat_default
+#iotwins
+
+- name: start database container container
+  docker_container:
+    name: slat-db
+    image: "{{ slat_mysql_image }}"
+    detach: true
+    state: started
+#    network_mode: host
+    networks:
+      - name: slat_default
+    ports:
+      - "{{slat_db_port}}:3306"
+      - "{{slat_db_port}}0:33060"
+    volumes:
+      - "{{ slat_db_data_dir }}:/var/lib/mysql"
+    restart_policy: always
+    env_file: "{{ slat_conf_dir }}/.mysqlenv"
+
+- name: wait for mysql to be up and running
+  wait_for:
+     host: "localhost"
+#     port: "3306"
+     port: "{{slat_db_port}}"
+     delay: 20
+     timeout: 600
+     connect_timeout: 10

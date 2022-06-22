@@ -2,12 +2,12 @@
 - name: Deploy IM service
   hosts: im
   become: yes
-  gather_facts: false
-  pre_tasks:
-    - name: Check python is installed
-      raw:  test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
-      changed_when: false
-    - name: Gathering Facts
-      setup:
+  # gather_facts: false
+  #  pre_tasks:
+  #    - name: Check python is installed
+  #      raw:  test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+  #      changed_when: false
+  #    - name: Gathering Facts
+  #      setup:
   roles:
     - im

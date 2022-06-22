@@ -38,5 +38,8 @@ Apache Licence v2
 http://www.apache.org/licenses/LICENSE-2.0
 
 
-Author Information
+Information
 ------------------
+
+iotwins-infn-cloud-support@lists.cnaf.infn.it
+INFN Italy

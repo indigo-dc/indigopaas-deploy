@@ -78,8 +78,8 @@ Including an example of how to use your role (for instance, with variables passe
       roles:
          - { role: iam, x: 42 }
 
-Author Information
+Information
 ------------------
 
-Marica Antonacci (marica.antonacci@ba.infn.it) <br> 
+iotwins-infn-cloud-support@lists.cnaf.infn.it 
 INFN Italy

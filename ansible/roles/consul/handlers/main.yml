@@ -1,0 +1,7 @@
+---
+# handlers file for consul
+#
+- name: restart consul
+  docker_service:
+    project_src: "{{ consul_conf_dir }}"
+    restarted: yes

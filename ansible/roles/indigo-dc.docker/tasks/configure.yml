@@ -1,0 +1,14 @@
+---
+- name: Make sure /etc/docker exists
+  file: path=/etc/docker state=directory
+
+- name: Set docker configuration
+  set_fact:
+    docker_config: "{{ docker_config|combine({ item.key: item.value }) }}"
+  when: item.value != ""
+  with_dict: "{{ docker_options }}"
+
+- name: Create the conf file /etc/docker/daemon.json
+  copy: content="{{ docker_config | to_nice_json }}\n" dest=/etc/docker/daemon.json
+  when: docker_config != {}
+  notify: restart docker

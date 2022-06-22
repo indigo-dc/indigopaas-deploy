@@ -1,12 +1,14 @@
   oidc:
    enabled: true
    iam-properties:
-     "[{{orchestrator_iam_issuer}}]":
-       audience: "{{ orchestrator_iam_audience }}"
+     "[{{ oidc_issuer }}]":
+       audience: "{{ oidc_audience }}"
+       admingroup: "{{ oidc_admingroup }}"
        orchestrator:
-         client-id: "{{orchestrator_iam_client_id}}"
-         client-secret: "{{orchestrator_iam_client_secret}}"
+         client-id: "{{ oidc_orchestrator_client_id }}"
+         client-secret: "{{ oidc_orchestrator_client_secret }}"
+         scopes: [ {{ oidc_orchestrator_scopes }} ]
        clues:
-         client-id: "{{orchestrator_clues_iam_client_id}}"
-         client-secret: "{{orchestrator_clues_iam_client_secret}}"
-       admingroup: "{{orchestrator_iam_admingroup}}"
+         client-id: "{{ oidc_clues_client_id }}"
+         client-secret: "{{ oidc_clues_client_secret }}"
+

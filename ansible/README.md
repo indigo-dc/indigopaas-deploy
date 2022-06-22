@@ -1,6 +1,6 @@
 # Requirements
 
-The roles, in this first version, have been written for Ubuntu 16.04.
+The roles, in this version, have been written for Ubuntu 18.04.
 
 ![](https://img.shields.io/badge/tested%20with-ansible%202.8.6-green.svg)
 
@@ -21,41 +21,43 @@ The roles, in this first version, have been written for Ubuntu 16.04.
 
 - Clone the repository
   ````
-  git clone https://github.com/indigo-dc/indigopaas-deploy.git
-  cd indigopaas-deploy/ansible
+  git clone https://baltig.infn.it/IoTwins/indigopaas-deploy-iotwins.git
+  cd indigopaas-deploy-iotwins/ansible
   ````
 
 - Edit the file inventory/inventory replacing the IPs
 
   ````
   [proxy]
-  172.30.24.3
+  192.168.1.27 ansible_connection=local
 
   [cmdb]
-  172.30.24.4
+  192.168.1.27 ansible_connection=local
 
-  [slam]
-  90.147.75.144
+  [slat]
+  192.168.1.27 ansible_connection=local
 
   [cpr]
-  172.30.24.4
+  192.168.1.27 ansible_connection=local
 
   [im]
-  172.30.24.5
+  192.168.1.27 ansible_connection=local
 
-  [monitoring_server]
-  172.30.24.6
+  #[monitoring_server]
+  #192.168.1.5
 
-  [monitoring_agent]
-  172.30.24.7
+  #[monitoring_agent]
+  #192.168.1.5
 
   [orchestrator]
-  172.30.24.8
+  192.168.1.19
 
-  [monitoring:children]
-  monitoring_server
-  monitoring_agent
+  #[monitoring:children]
+  #monitoring_server
+  #monitoring_agent
 
+  [orchestrator_dashboard]
+  192.168.1.27 ansible_connection=local
   ````
 
 - Edit the variables in inventory/group_vars
@@ -66,14 +68,19 @@ The roles, in this first version, have been written for Ubuntu 16.04.
   ansible-playbook -i inventory/inventory playbooks/deploy-proxy.yml
   ansible-playbook -i inventory/inventory playbooks/deploy-iam.yml
   ansible-playbook -i inventory/inventory playbooks/deploy-cmdb.yml
-  ansible-playbook -i inventory/inventory playbooks/deploy-slam.yml
+  ansible-playbook -i inventory/inventory playbooks/deploy-slat.yml
   ansible-playbook -i inventory/inventory playbooks/deploy-cpr.yml
   ansible-playbook -i inventory/inventory playbooks/deploy-im.yml
-  ansible-playbook -i inventory/inventory playbooks/deploy-monitoring.yml
+  #ansible-playbook -i inventory/inventory playbooks/deploy-monitoring.yml
   ansible-playbook -i inventory/inventory playbooks/deploy-orchestrator.yml
   ansible-playbook -i inventory/inventory playbooks/deploy-orchestrator-dashboard.yml
   ````
-  
+
+
+## CIP: installation, configuration, usage
+
+To install, configure and use Cliud Info Provider to populate CMDB, following the procedure at [CIP installation and use](https://baltig.infn.it/IoTwins/indigopaas-deploy-iotwins/-/blob/main/ansible/roles/cip/README.md) 
+
 ## Troubleshooting
 
 If running a playbook you get the following error:

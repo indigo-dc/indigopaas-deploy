@@ -2,10 +2,9 @@
 # tasks file for indigopaas.orchestrator
 - name: "Check input variables"
   fail:
-    msg: "Change the password: you are using <<changeit>> as value for one or more variables (orchestrator_mysql_root_password, orchestrator_mysql_password) " 
+    msg: "Change the password: you are using <<changeit>> as value for one or more variables (orchestrator_mysql_password) " 
   when: item == "changeit"
   with_items:
-    - "{{orchestrator_mysql_root_password}}"
     - "{{orchestrator_mysql_password}}"
 
 
@@ -17,62 +16,16 @@
   with_items:
     - "{{ orchestrator_conf_dir }}"
     - "{{ orchestrator_conf_dir}}/trusted_certs"
-    - "{{ orchestrator_mysql_data_dir }}"
 
+- include: database.yml 
+  when: orchestrator_db_host is not defined
 
-- name: "Create mysql container env file"
-  template:
-    src=mysql-env.j2 dest="{{ orchestrator_conf_dir }}/.mysqlenv"
+- set_fact: 
+    orchestrator_mysql_host: "{{ orchestrator_db_host }}"
+  when: orchestrator_db_host is defined  
 
-
-- name: Start mysql and create the deployments DB
-  docker_container: 
-    name: orchestrator-mysql
-    image: "{{ orchestrator_mysql_image }}"
-    detach: true
-    state: started
-    network_mode: host
-#    published_ports:
-#     - 3306:3306
-    volumes:
-    - "{{ orchestrator_mysql_data_dir }}:/var/lib/mysql"
-    restart_policy: always
-    env_file: "{{ orchestrator_conf_dir }}/.mysqlenv"
-
-
-- name: wait for mysql to be up and running 
-  wait_for: 
-     host: "localhost" 
-     port: "3306"
-     delay: 20
-     timeout: 600
-     connect_timeout: 10
-
-- name: install MySQL-python
-  package: 
-    name: python-mysqldb
-    state: present
-
-- name: create the workflow DB
-  mysql_db:
-    login_host: "{{orchestrator_mysql_host}}"
-    login_password: "{{orchestrator_mysql_root_password}}"
-    login_user: root
-    name: "{{orchestrator_workflow_dbname}}" 
-    state: present
-
-- name: add privileges to orchestrator db user
-  mysql_user:
-    append_privs: yes
-    host: "%"
-    login_host: "{{orchestrator_mysql_host}}"
-    login_password: "{{orchestrator_mysql_root_password}}"
-    login_user: root
-    name: "{{orchestrator_mysql_user}}"
-    password: "{{orchestrator_mysql_password}}"
-    priv: "{{orchestrator_workflow_dbname}}.*:ALL"
-    state: present
-
+- debug:
+    var: orchestrator_mysql_host      
 
 - name: "Create Orchestrator container env file"
   template:
@@ -88,16 +41,6 @@
        - "{{orchestrator_conf_dir}}/application.yml:/orchestrator/application.yml"
        - "{{orchestrator_conf_dir}}/trusted_certs:/orchestrator/trusted_certs"
 
-- block:
-    - get_url:
-        url: "{{orchestrator_custom_types}}"
-        dest: "{{orchestrator_conf_dir}}/custom_types.yaml"
-    - set_fact:
-        volumes_to_mount:
-          - "{{orchestrator_conf_dir}}/application.yml:/orchestrator/application.yml"
-          - "{{orchestrator_conf_dir}}/trusted_certs:/orchestrator/trusted_certs"
-          - "{{orchestrator_conf_dir}}/custom_types.yaml:/tosca/custom_types.yaml"
-  when: orchestrator_custom_types is defined
 
 - name: Start Orchestrator container
   docker_container:

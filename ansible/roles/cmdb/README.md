@@ -42,8 +42,8 @@ Example Playbook
 
 
 
-Author Information
+Information
 ------------------
 
-Marica Antonacci (marica.antonacci@ba.infn.it)
+iotwins-infn-cloud-support@lists.cnaf.infn.it
 INFN Italy

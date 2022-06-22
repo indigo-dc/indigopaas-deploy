@@ -1,26 +1,28 @@
 ---
 # defaults file for indigopaas
 
-im_conf_dir: /etc/im
-im_log_dir: /var/log/im
+im_conf_dir: /root/im/etc/im
+im_log_dir: /root/im/var/log/im
 im_mysql_image: mysql:5.7
-im_mysql_data_dir: /data/im/mysql
-im_mysql_root_password: changeit
+im_mysql_data_dir: /root/im/data/im/mysql
+im_mysql_root_password: ChangeMe 
 im_mysql_dbname: im
 im_mysql_user: im
-im_mysql_password: changeit
-im_mysql_host: 127.0.0.1
+im_mysql_password: ChangeMe
+#im_mysql_host: 127.0.0.1
+im_mysql_host: mysql-im
+im_mysql_port: 3306
 
-im_image: "indigodatacloud/im:{{im_image_version}}"
-im_image_version: 1.9.2
+im_image: "grycap/im:{{im_image_version}}"
+im_image_version: 1.10.7
 im_repo_tag: "v{{im_image_version}}"
-im_conf_file: /etc/im/im.cfg
+im_conf_file: /root/im/etc/im/im.cfg
 im_cfg_max_ctx_time: 28800
 im_cfg_ansible_install_timeout: 500
-im_cfg_oidc_issuers: 'https://iam-test.indigo-datacloud.eu/'
-im_cfg_oidc_client_id:
-im_cfg_oidc_client_secret:
+im_cfg_oidc_issuers: 
+im_cfg_oidc_client_id: 
+im_cfg_oidc_client_secret: 
 im_cfg_ssh_reverse_tunnels: 'True'
 im_cfg_private_net_masks: '10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,169.254.0.0/16,100.64.0.0/10,192.0.0.0/24,198.18.0.0/15'
 
-im_ansible_version: '2.6.20'
+im_ansible_version: '2.9.21'
