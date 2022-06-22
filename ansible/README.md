@@ -1,7 +1,3 @@
-# Requirements
-
-The roles, in this version, have been written for Ubuntu 18.04.
-
 ![](https://img.shields.io/badge/tested%20with-ansible%202.8.6-green.svg)
 
 # Deployment scenario:
@@ -10,16 +6,18 @@ The roles, in this version, have been written for Ubuntu 18.04.
 
 # Requirements
 
-Resource requirements for the IoTwins indigoPaaS deployment
+The Ansible roles, in this version, have been written for Ubuntu 18.04.
 
-- 2x 8 CPU, 8GB RAM, 100GB storage
+Resource requirements for the IoTwins indigoPaaS deployment:
 
-- Cloud provider based on Openstack for cloud resources
+- 2 virtual machines with each 8 CPU, 8GB RAM, 100GB storage
 
-- EDGE provider based on Mesos for EDGE resources (see https://baltig.infn.it/IoTwins/mesos-edge)
+- Cloud provider: Any
+
+- EDGE provider: based on Mesos (see https://baltig.infn.it/IoTwins/mesos-edge)
 
 
-# Configure the control machine
+# Configure the control node
 
 - install ansible <br>Recommended installation path: https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#latest-releases-via-apt-ubuntu
 
@@ -32,7 +30,7 @@ Resource requirements for the IoTwins indigoPaaS deployment
 
 - Clone the repository
   ````
-  git clone https://baltig.infn.it/IoTwins/indigopaas-deploy-iotwins.git
+  git clone -b iotwins https://github.com/indigo-dc/indigopaas-deploy.git
   cd indigopaas-deploy-iotwins/ansible
   ````
 
@@ -71,7 +69,7 @@ Resource requirements for the IoTwins indigoPaaS deployment
   192.168.1.27 ansible_connection=local
   ````
 
-- Edit the variables in inventory/group_vars
+- Edit the variables in inventory/group_vars 
 
 - Run the playbooks for each service you want to deploy. 
   The recommended order is the following:
