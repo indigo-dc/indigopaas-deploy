@@ -8,6 +8,17 @@ The roles, in this version, have been written for Ubuntu 18.04.
 
 ![](doc/images/paas_deployment_schema.png)
 
+# Requirements
+
+Resource requirements for the IoTwins indigoPaaS deployment
+
+- 2x 8 CPU, 8GB RAM, 100GB storage
+
+- Cloud provider based on Openstack for cloud resources
+
+- EDGE provider based on Mesos for EDGE resources (see https://baltig.infn.it/IoTwins/mesos-edge)
+
+
 # Configure the control machine
 
 - install ansible <br>Recommended installation path: https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#latest-releases-via-apt-ubuntu
