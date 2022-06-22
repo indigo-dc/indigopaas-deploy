@@ -69,9 +69,10 @@ Resource requirements for the IoTwins indigoPaaS deployment:
   192.168.1.27 ansible_connection=local
   ````
 
-- For ech service, fill its specific variables in the correspondig file present inder inventory/group_vars as described in the README file of each service available under roles/ directory (https://github.com/indigo-dc/indigopaas-deploy/tree/iotwins/ansible/roles)
+- For each service, fill its specific variables in the correspondig file present under inventory/group_vars as described in the README file of each service available under roles/ directory (https://github.com/indigo-dc/indigopaas-deploy/tree/iotwins/ansible/roles)
 
-- Run the playbooks for each service you want to deploy. 
+- Run the playbooks for each service you want to deploy.
+  For each service, fill its specific variables in the correspondig file present under ansible/roles/<service>/defaults/main.yml as described in the README file of each service available under roles/ directory (https://github.com/indigo-dc/indigopaas-deploy/tree/iotwins/ansible/roles) 
   The recommended order is the following:
   ````
   ansible-playbook -i inventory/inventory playbooks/deploy-proxy.yml
