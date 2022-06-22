@@ -69,7 +69,7 @@ Resource requirements for the IoTwins indigoPaaS deployment:
   192.168.1.27 ansible_connection=local
   ````
 
-- Edit the variables in inventory/group_vars 
+- For ech service, fill its specific variables in the correspondig file present inder inventory/group_vars as described in the README file of each service available under roles/ directory (https://github.com/indigo-dc/indigopaas-deploy/tree/iotwins/ansible/roles)
 
 - Run the playbooks for each service you want to deploy. 
   The recommended order is the following:
@@ -86,9 +86,9 @@ Resource requirements for the IoTwins indigoPaaS deployment:
   ````
 
 
-## CIP: installation, configuration, usage
+## Special case: Installation, configuration, usage pf Cloud Info Provider (CIP) service
 
-To install, configure and use Cliud Info Provider to populate CMDB, following the procedure at [CIP installation and use](https://baltig.infn.it/IoTwins/indigopaas-deploy-iotwins/-/blob/main/ansible/roles/cip/README.md) 
+To install, configure and use the Cloud Info Provider (CIP) service to populate CMDB, please following the procedure described at [CIP installation and use](https://baltig.infn.it/IoTwins/indigopaas-deploy-iotwins/-/blob/main/ansible/roles/cip/README.md) 
 
 ## Troubleshooting
 
