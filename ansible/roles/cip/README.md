@@ -1,4 +1,4 @@
-CPR
+CIP
 =========
 
 Deploy INDIGO CIP service using the following procedure <br>
